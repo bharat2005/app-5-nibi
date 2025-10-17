@@ -20,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.bharat.app5.core.navigation.Screen
 import com.bharat.app5.feature_auth.presentation.navigation.authGraph
+import com.bharat.app5.feature_main.presentaiton.navigation.homeGraph
 import com.bharat.app5.ui.theme.App5Theme
 
 class MainActivity : ComponentActivity() {
@@ -39,7 +40,9 @@ class MainActivity : ComponentActivity() {
                         navController = navController
                     ){
 
-                        authGraph()
+                        authGraph(navController)
+
+                        homeGraph(navController)
 
 
                     }
