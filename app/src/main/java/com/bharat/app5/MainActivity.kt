@@ -23,13 +23,14 @@ import com.bharat.app5.feature_auth.presentation.navigation.authGraph
 import com.bharat.app5.feature_main.presentaiton.navigation.homeGraph
 import com.bharat.app5.ui.theme.App5Theme
 
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             App5Theme {
-
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

@@ -11,8 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 
+
+
 @Composable
-fun RegisterScreen(onRegisterSuccess : () -> Unit = {}) {
+fun RegisterScreen(
+    onRegisterSuccess : () -> Unit = {},
+
+) {
     Scaffold {
             paddingValues ->
         Column(
