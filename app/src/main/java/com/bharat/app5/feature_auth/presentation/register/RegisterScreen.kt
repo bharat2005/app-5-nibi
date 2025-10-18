@@ -28,7 +28,7 @@ fun RegisterScreen(
             Button(
                 onRegisterSuccess
             ){
-                Text("RegisterSuccess")
+                Text("Register Success")
             }
 
         }
