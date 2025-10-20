@@ -88,9 +88,7 @@ viewModel: RegisterViewModel = viewModel()
 
                     RegistrationStep.WEIGHT_STEP -> Column {
                         Text("Weight")
-                        Button(onClick = { viewModel.goToNextStep() }) {
-                            Text("Next")
-                        }
+
                     }
 
                     RegistrationStep.AUTH_STEP -> Column {
