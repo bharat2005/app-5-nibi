@@ -22,7 +22,7 @@ enum class RegistrationStep {
     HEIGHT_STEP,
     WEIGHT_STEP,
     AUTH_STEP,
-    EMAIL_AUTH_STEP,
+   // EMAIL_AUTH_STEP,
 }
 
 
@@ -76,11 +76,12 @@ class RegisterViewModel : ViewModel() {
             RegistrationStep.DOB_STEP -> RegistrationStep.HEIGHT_STEP
             RegistrationStep.HEIGHT_STEP -> RegistrationStep.WEIGHT_STEP
             RegistrationStep.WEIGHT_STEP -> RegistrationStep.AUTH_STEP
-            else -> null
+            RegistrationStep.AUTH_STEP -> null
+        }
+        if(nextStep != null){
+            _uiState.update{ it.copy(currentStep = nextStep)}
         }
     }
-
-
 
 
 }

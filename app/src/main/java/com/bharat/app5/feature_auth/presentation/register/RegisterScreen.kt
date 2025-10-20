@@ -1,42 +1,72 @@
 package com.bharat.app5.feature_auth.presentation.register
 
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOut
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RegisterScreen(
 onRegisterSuccess : () -> Unit,
 viewModel: RegisterViewModel = viewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold {
             paddingValues ->
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            contentAlignment = Alignment.Center
         ){
+            AnimatedContent(
+                targetState = uiState.currentStep,
+                transitionSpec = {
+                    slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                            slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
 
-
-            Text("Register Screen")
-
-
-
+                }
+            ) { targetState ->
+            when(targetState){
+                RegistrationStep.GENDER_STEP -> Column {
+                    Text("Gender")
+                    Button(onClick = {}){
+                        Text("Next")
+                    }
+                }
+                RegistrationStep.GOAL_STEP -> Text("Goal")
+                RegistrationStep.NAME_STEP -> Text("Name")
+                RegistrationStep.DOB_STEP -> Text("DOB")
+                RegistrationStep.HEIGHT_STEP -> Text("Height")
+                RegistrationStep.WEIGHT_STEP -> Text("Weight")
+                RegistrationStep.AUTH_STEP -> Text("Auth")
+            }
         }
 
-    }
+        }
 
 }
