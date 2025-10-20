@@ -37,12 +37,11 @@ viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    Scaffold {
-            paddingValues ->
+    Scaffold { paddingValues ->
         Box(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
             contentAlignment = Alignment.Center
-        ){
+        ) {
             AnimatedContent(
                 targetState = uiState.currentStep,
                 transitionSpec = {
@@ -51,22 +50,58 @@ viewModel: RegisterViewModel = viewModel()
 
                 }
             ) { targetState ->
-            when(targetState){
-                RegistrationStep.GENDER_STEP -> Column {
-                    Text("Gender")
-                    Button(onClick = {}){
-                        Text("Next")
+                when (targetState) {
+                    RegistrationStep.GENDER_STEP -> Column {
+                        Text("Gender")
+                        Button(onClick = { viewModel.goToNextStep() }) {
+                            Text("Next")
+                        }
+                    }
+
+                    RegistrationStep.GOAL_STEP -> Column {
+                        Text("Goal")
+                        Button(onClick = { viewModel.goToNextStep() }) {
+                            Text("Next")
+                        }
+                    }
+
+                    RegistrationStep.NAME_STEP -> Column {
+                        Text("Name")
+                        Button(onClick = { viewModel.goToNextStep() }) {
+                            Text("Next")
+                        }
+                    }
+
+                    RegistrationStep.DOB_STEP -> Column {
+                        Text("DOB")
+                        Button(onClick = { viewModel.goToNextStep() }) {
+                            Text("Next")
+                        }
+                    }
+
+                    RegistrationStep.HEIGHT_STEP -> Column {
+                        Text("Height")
+                        Button(onClick = { viewModel.goToNextStep() }) {
+                            Text("Next")
+                        }
+                    }
+
+                    RegistrationStep.WEIGHT_STEP -> Column {
+                        Text("Weight")
+                        Button(onClick = { viewModel.goToNextStep() }) {
+                            Text("Next")
+                        }
+                    }
+
+                    RegistrationStep.AUTH_STEP -> Column {
+                        Text("Auth")
+                        Button(onClick = {}) {
+                            Text("Register")
+                        }
                     }
                 }
-                RegistrationStep.GOAL_STEP -> Text("Goal")
-                RegistrationStep.NAME_STEP -> Text("Name")
-                RegistrationStep.DOB_STEP -> Text("DOB")
-                RegistrationStep.HEIGHT_STEP -> Text("Height")
-                RegistrationStep.WEIGHT_STEP -> Text("Weight")
-                RegistrationStep.AUTH_STEP -> Text("Auth")
             }
-        }
 
         }
-
+    }
 }

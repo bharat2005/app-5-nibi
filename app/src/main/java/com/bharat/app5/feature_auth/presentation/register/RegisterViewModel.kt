@@ -44,7 +44,7 @@ class RegisterViewModel : ViewModel() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun onGenderSelected(gender : Gender){
-        _uiState.update{ it.copy(userDetails = it.userDetails.copy(gender = gender)}
+        _uiState.update{ it.copy(userDetails = it.userDetails.copy(gender = gender))}
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun onGoalSelected(goal : Goal){
