@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "650451806359",
+    "project_id": "app5-33b90",
+    "storage_bucket": "app5-33b90.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650451806359:android:70286727bdaaa219c061d2",
+        "android_client_info": {
+          "package_name": "com.bharat.app5"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN2lKt5r53lKY2G-6BOdtCsY2CTvrBHpY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
