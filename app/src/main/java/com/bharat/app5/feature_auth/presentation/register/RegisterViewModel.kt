@@ -67,6 +67,19 @@ class RegisterViewModel : ViewModel() {
         _uiState.update { it.copy(userDetails = it.userDetails.copy(weight = weight)) }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun goToNextStep(){
+        val nextStep = when(_uiState.value.currentStep){
+            RegistrationStep.GENDER_STEP -> RegistrationStep.GOAL_STEP
+            RegistrationStep.GOAL_STEP -> RegistrationStep.NAME_STEP
+            RegistrationStep.NAME_STEP -> RegistrationStep.DOB_STEP
+            RegistrationStep.DOB_STEP -> RegistrationStep.HEIGHT_STEP
+            RegistrationStep.HEIGHT_STEP -> RegistrationStep.WEIGHT_STEP
+            RegistrationStep.WEIGHT_STEP -> RegistrationStep.AUTH_STEP
+            else -> null
+        }
+    }
+
 
 
 
