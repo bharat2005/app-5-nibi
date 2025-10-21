@@ -63,6 +63,7 @@ fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun MyPreview(){
