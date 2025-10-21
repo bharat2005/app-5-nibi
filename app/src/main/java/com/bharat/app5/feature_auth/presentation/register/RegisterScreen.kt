@@ -34,6 +34,7 @@ import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
+import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.google.firebase.firestore.bundle.BundleReader
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -69,7 +70,7 @@ viewModel: RegisterViewModel = viewModel()
                         when (targetState) {
                             RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel)
 
-                            RegistrationStep.GOAL_STEP -> null
+                            RegistrationStep.GOAL_STEP -> GoalStep(viewModel= viewModel)
 
                             RegistrationStep.NAME_STEP -> null
 

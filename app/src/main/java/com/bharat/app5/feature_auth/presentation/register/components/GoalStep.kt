@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,7 +41,8 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
      ){
          RegistrationStepHolder(
              primaryText = "Select your goal, Pleasee?",
-             stepIconRes = 12
+             stepIconRes = 12,
+             modifier = Modifier.align(Alignment.TopCenter)
          ) {
              Column(
                  modifier = Modifier.fillMaxWidth(),
@@ -65,7 +67,7 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
                              horizontalArrangement = Arrangement.spacedBy(18.dp, Alignment.CenterHorizontally)
                          ) {
                              Box(modifier = Modifier.size(18.dp).background(Color.Black))
-                             Text("")
+                             Text(goal.displayName)
 
                          }
                      }
@@ -73,6 +75,14 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
 
              }
 
+         }
+
+
+         Button(
+             onClick = {viewModel.goToNextStep()},
+             modifier = Modifier.align(Alignment.TopCenter)
+         ) {
+             Text("Next")
          }
      }
 
