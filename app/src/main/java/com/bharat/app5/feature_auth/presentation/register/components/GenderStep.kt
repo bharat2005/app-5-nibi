@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +33,7 @@ import com.bharat.app5.feature_auth.presentation.register.RegistrationStep
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
+     val uiState by viewModel.uiState.collectAsState()
 
     RegistrationStepHolder(
         primaryText = "What is your gender, plase select below?",
@@ -41,14 +45,17 @@ fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Gender.entries.forEach{ gender ->
+                val isSelected = uiState.userDetails.gender == gender
+                val backgroundColor = if(isSelected) MaterialTheme.colorScheme.surface else Color.White
+                val borderColor = if(isSelected) MaterialTheme.colorScheme.primary else Color.LightGray
 
                     Box(
                         modifier = Modifier
                             .size(120.dp)
-                            .border(color = Color.Gray, width = 1.dp, shape = RoundedCornerShape(12.dp))
+                            .border(color = borderColor, width = 1.dp, shape = RoundedCornerShape(12.dp))
                             .clip(RoundedCornerShape(12.dp))
                             .clickable(onClick = { viewModel.onGenderSelected(gender)})
-                            .background(Color.White)
+                            .background(backgroundColor)
                         ,
                         contentAlignment = Alignment.Center
                     ){
