@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -40,10 +41,10 @@ viewModel: RegisterViewModel = viewModel()
     Scaffold { paddingValues ->
         Box(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
-            contentAlignment = Alignment.Center
         ) {
             AnimatedContent(
                 targetState = uiState.currentStep,
+
                 transitionSpec = {
                     slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
                             slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
@@ -51,12 +52,7 @@ viewModel: RegisterViewModel = viewModel()
                 }
             ) { targetState ->
                 when (targetState) {
-                    RegistrationStep.GENDER_STEP -> Column {
-                        Text("Gender")
-                        Button(onClick = { viewModel.goToNextStep() }) {
-                            Text("Next")
-                        }
-                    }
+                    RegistrationStep.GENDER_STEP -> GenderStep()
 
                     RegistrationStep.GOAL_STEP -> Column {
                         Text("Goal")
