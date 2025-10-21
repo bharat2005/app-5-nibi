@@ -52,7 +52,7 @@ viewModel: RegisterViewModel = viewModel()
                 }
             ) { targetState ->
                 when (targetState) {
-                    RegistrationStep.GENDER_STEP -> GenderStep()
+                    RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel)
 
                     RegistrationStep.GOAL_STEP -> Column {
                         Text("Goal")
