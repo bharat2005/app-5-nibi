@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
@@ -44,6 +45,7 @@ viewModel: RegisterViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
 
     Scaffold { paddingValues ->
+
         Box(
             modifier = Modifier.fillMaxSize().padding(paddingValues).padding(top = 40.dp),
         ) {
@@ -61,47 +63,24 @@ viewModel: RegisterViewModel = viewModel()
 
                     }
                 ) { targetState ->
-                    when (targetState) {
-                        RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel)
+                    Box(
+                        modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp).padding(bottom = 24.dp)
+                    ) {
+                        when (targetState) {
+                            RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel)
 
-                        RegistrationStep.GOAL_STEP -> Column {
-                            Text("Goal")
-                            Button(onClick = { viewModel.goToNextStep() }) {
-                                Text("Next")
-                            }
-                        }
+                            RegistrationStep.GOAL_STEP -> null
 
-                        RegistrationStep.NAME_STEP -> Column {
-                            Text("Name")
-                            Button(onClick = { viewModel.goToNextStep() }) {
-                                Text("Next")
-                            }
-                        }
+                            RegistrationStep.NAME_STEP -> null
 
-                        RegistrationStep.DOB_STEP -> Column {
-                            Text("DOB")
-                            Button(onClick = { viewModel.goToNextStep() }) {
-                                Text("Next")
-                            }
-                        }
+                            RegistrationStep.DOB_STEP -> null
 
-                        RegistrationStep.HEIGHT_STEP -> Column {
-                            Text("Height")
-                            Button(onClick = { viewModel.goToNextStep() }) {
-                                Text("Next")
-                            }
-                        }
+                            RegistrationStep.HEIGHT_STEP -> null
 
-                        RegistrationStep.WEIGHT_STEP -> Column {
-                            Text("Weight")
+                            RegistrationStep.WEIGHT_STEP -> null
 
-                        }
+                            RegistrationStep.AUTH_STEP -> null
 
-                        RegistrationStep.AUTH_STEP -> Column {
-                            Text("Auth")
-                            Button(onClick = {}) {
-                                Text("Register")
-                            }
                         }
                     }
                 }

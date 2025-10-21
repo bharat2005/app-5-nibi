@@ -26,9 +26,9 @@ fun RegistrationStepHolder(
     content: @Composable () -> Unit
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 44.dp),
+        modifier = modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterVertically)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
             modifier = Modifier.size(40.dp).background(Color.Black)

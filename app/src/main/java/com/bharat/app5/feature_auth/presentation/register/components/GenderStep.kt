@@ -39,17 +39,17 @@ import com.bharat.app5.feature_auth.presentation.register.RegistrationStep
 fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
      val uiState by viewModel.uiState.collectAsState()
 
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween
     ) {
         RegistrationStepHolder(
             primaryText = "What is your gender, plase select below?",
             secondaryText = "Please be careful to select the correct gender, as it matter alot?",
-            stepIconRes = 12
+            stepIconRes = 12,
+            modifier = Modifier.align(Alignment.TopCenter)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp).padding(top = 24.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 44.dp).padding(top = 24.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Gender.entries.forEach { gender ->
@@ -59,7 +59,7 @@ fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
                     val borderColor =
                         if (isSelected) MaterialTheme.colorScheme.primary else Color.LightGray
 
-                    Box(
+                    Column(
                         modifier = Modifier
                             .size(120.dp)
                             .border(
@@ -70,28 +70,23 @@ fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
                             .clip(RoundedCornerShape(12.dp))
                             .clickable(onClick = { viewModel.onGenderSelected(gender) })
                             .background(backgroundColor),
-                        contentAlignment = Alignment.Center
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
+                        Box(modifier = Modifier.size(18.dp).background(Color.Black))
                         Text(gender.disPlayName)
                     }
 
 
                 }
             }
+        }
 
-            Button(
-                onClick = {viewModel.goToNextStep()}
-            ) {
-                Text("Next")
-            }
-
+        Button(
+            modifier =  Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+            onClick = {viewModel.goToNextStep()}
+        ) {
+            Text("Next")
         }
     }
 }
-
-//@RequiresApi(Build.VERSION_CODES.O)
-//@Preview(showBackground = true)
-//@Composable
-//fun MyPreview(){
-//    GenderStep()
-//}
