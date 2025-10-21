@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,7 +46,7 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
              modifier = Modifier.align(Alignment.TopCenter)
          ) {
              Column(
-                 modifier = Modifier.fillMaxWidth(),
+                 modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
                  verticalArrangement = Arrangement.spacedBy(18.dp),
                  horizontalAlignment = Alignment.CenterHorizontally
              ) {
@@ -57,9 +58,11 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
                      Box(
                          modifier = Modifier
                              .fillMaxWidth()
-                             .height(50.dp)
-                             .clip(RoundedCornerShape(18.dp))
-                             .border(shape = RoundedCornerShape(18.dp), width = 1.dp, color = Color.LightGray)
+                             .height(60.dp)
+                             .clip(RoundedCornerShape(24.dp))
+                             .border(shape = RoundedCornerShape(24.dp), width = 1.dp, color = borderColor)
+                             .clickable(onClick = {viewModel.onGoalSelected(goal)})
+                             .background(backgroundColor)
                      ){
                          Row(
                              modifier = Modifier.fillMaxSize(),
@@ -80,7 +83,7 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
 
          Button(
              onClick = {viewModel.goToNextStep()},
-             modifier = Modifier.align(Alignment.TopCenter)
+             modifier = Modifier.fillMaxWidth( ).align(Alignment.BottomCenter)
          ) {
              Text("Next")
          }
