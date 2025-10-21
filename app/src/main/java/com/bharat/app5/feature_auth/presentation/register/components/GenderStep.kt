@@ -7,12 +7,15 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bharat.app5.feature_auth.domain.model.Gender
@@ -35,38 +39,53 @@ import com.bharat.app5.feature_auth.presentation.register.RegistrationStep
 fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
      val uiState by viewModel.uiState.collectAsState()
 
-    RegistrationStepHolder(
-        primaryText = "What is your gender, plase select below?",
-        secondaryText = "Please be careful to select the correct gender, as it matter alot?",
-        stepIconRes = 12
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp).padding(top = 24.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+        RegistrationStepHolder(
+            primaryText = "What is your gender, plase select below?",
+            secondaryText = "Please be careful to select the correct gender, as it matter alot?",
+            stepIconRes = 12
         ) {
-            Gender.entries.forEach{ gender ->
-                val isSelected = uiState.userDetails.gender == gender
-                val backgroundColor = if(isSelected) MaterialTheme.colorScheme.surface else Color.White
-                val borderColor = if(isSelected) MaterialTheme.colorScheme.primary else Color.LightGray
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 18.dp).padding(top = 24.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Gender.entries.forEach { gender ->
+                    val isSelected = uiState.userDetails.gender == gender
+                    val backgroundColor =
+                        if (isSelected) MaterialTheme.colorScheme.surface else Color.White
+                    val borderColor =
+                        if (isSelected) MaterialTheme.colorScheme.primary else Color.LightGray
 
                     Box(
                         modifier = Modifier
                             .size(120.dp)
-                            .border(color = borderColor, width = 1.dp, shape = RoundedCornerShape(12.dp))
+                            .border(
+                                color = borderColor,
+                                width = 1.dp,
+                                shape = RoundedCornerShape(12.dp)
+                            )
                             .clip(RoundedCornerShape(12.dp))
-                            .clickable(onClick = { viewModel.onGenderSelected(gender)})
-                            .background(backgroundColor)
-                        ,
+                            .clickable(onClick = { viewModel.onGenderSelected(gender) })
+                            .background(backgroundColor),
                         contentAlignment = Alignment.Center
-                    ){
-                        Text(gender.toString())
+                    ) {
+                        Text(gender.disPlayName)
                     }
 
 
+                }
             }
+
+            Button(
+                onClick = {viewModel.goToNextStep()}
+            ) {
+                Text("Next")
+            }
+
         }
-
-
     }
 }
 

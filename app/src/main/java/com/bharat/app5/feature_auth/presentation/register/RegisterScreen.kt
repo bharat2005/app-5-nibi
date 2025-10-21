@@ -13,8 +13,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
@@ -27,8 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
+import com.google.firebase.firestore.bundle.BundleReader
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -40,57 +45,63 @@ viewModel: RegisterViewModel = viewModel()
 
     Scaffold { paddingValues ->
         Box(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
+            modifier = Modifier.fillMaxSize().padding(paddingValues).padding(top = 40.dp),
         ) {
-            AnimatedContent(
-                targetState = uiState.currentStep,
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                Spacer(modifier = Modifier.height(50.dp))
 
-                transitionSpec = {
-                    slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
-                            slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+                AnimatedContent(
+                    targetState = uiState.currentStep,
 
-                }
-            ) { targetState ->
-                when (targetState) {
-                    RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel)
+                    transitionSpec = {
+                        slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                                slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
 
-                    RegistrationStep.GOAL_STEP -> Column {
-                        Text("Goal")
-                        Button(onClick = { viewModel.goToNextStep() }) {
-                            Text("Next")
+                    }
+                ) { targetState ->
+                    when (targetState) {
+                        RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel)
+
+                        RegistrationStep.GOAL_STEP -> Column {
+                            Text("Goal")
+                            Button(onClick = { viewModel.goToNextStep() }) {
+                                Text("Next")
+                            }
                         }
-                    }
 
-                    RegistrationStep.NAME_STEP -> Column {
-                        Text("Name")
-                        Button(onClick = { viewModel.goToNextStep() }) {
-                            Text("Next")
+                        RegistrationStep.NAME_STEP -> Column {
+                            Text("Name")
+                            Button(onClick = { viewModel.goToNextStep() }) {
+                                Text("Next")
+                            }
                         }
-                    }
 
-                    RegistrationStep.DOB_STEP -> Column {
-                        Text("DOB")
-                        Button(onClick = { viewModel.goToNextStep() }) {
-                            Text("Next")
+                        RegistrationStep.DOB_STEP -> Column {
+                            Text("DOB")
+                            Button(onClick = { viewModel.goToNextStep() }) {
+                                Text("Next")
+                            }
                         }
-                    }
 
-                    RegistrationStep.HEIGHT_STEP -> Column {
-                        Text("Height")
-                        Button(onClick = { viewModel.goToNextStep() }) {
-                            Text("Next")
+                        RegistrationStep.HEIGHT_STEP -> Column {
+                            Text("Height")
+                            Button(onClick = { viewModel.goToNextStep() }) {
+                                Text("Next")
+                            }
                         }
-                    }
 
-                    RegistrationStep.WEIGHT_STEP -> Column {
-                        Text("Weight")
+                        RegistrationStep.WEIGHT_STEP -> Column {
+                            Text("Weight")
 
-                    }
+                        }
 
-                    RegistrationStep.AUTH_STEP -> Column {
-                        Text("Auth")
-                        Button(onClick = {}) {
-                            Text("Register")
+                        RegistrationStep.AUTH_STEP -> Column {
+                            Text("Auth")
+                            Button(onClick = {}) {
+                                Text("Register")
+                            }
                         }
                     }
                 }

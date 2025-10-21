@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import java.time.LocalDate
 
-enum class Gender{ MALE, FEMALE}
+enum class Gender( val disPlayName : String){ MALE("Male"), FEMALE("Female")}
 enum class Goal { LOSE_WEIGHT, GAIN_WEIGHT, MAINTAIN_WEIGHT }
 
 data class UserDetails @RequiresApi(Build.VERSION_CODES.O) constructor(
