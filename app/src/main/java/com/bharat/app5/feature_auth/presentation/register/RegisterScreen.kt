@@ -51,7 +51,7 @@ viewModel: RegisterViewModel = viewModel()
     BackHandler {
         val currentStep = uiState.currentStep
         if(currentStep == RegistrationStep.GENDER_STEP){
-            onExit
+            onExit()
         } else {
             viewModel.goToPreviousStep()
         }
