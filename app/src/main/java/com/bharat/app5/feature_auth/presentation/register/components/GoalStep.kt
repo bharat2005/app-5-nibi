@@ -96,7 +96,10 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
                  text = { Text("Currently we only support weight loss plans. Selecting ${unSupportedGoal} will default to weight loss. Support for other goals is coming soon.") },
                  onDismissRequest = {},
                 confirmButton = {
-                    Button(onClick = {viewModel.onDismissUnsupportedGoal()}) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = {viewModel.onDismissUnsupportedGoal()}
+                    ) {
                         Text("Ok")
                  }
              }
