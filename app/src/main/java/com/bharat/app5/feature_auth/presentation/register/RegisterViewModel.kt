@@ -37,10 +37,19 @@ data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
 
 class RegisterViewModel : ViewModel() {
 
+    //UiState
     @RequiresApi(Build.VERSION_CODES.O)
     private val _uiState = MutableStateFlow(RegisterUiState())
     @RequiresApi(Build.VERSION_CODES.O)
     val uiState = _uiState.asStateFlow()
+
+
+    //Unsupported goal
+    private val _unSupportedGoal = MutableStateFlow<Goal?>(null)
+    val unSupportedGoal = _unSupportedGoal.asStateFlow()
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun onGenderSelected(gender : Gender){
@@ -48,8 +57,22 @@ class RegisterViewModel : ViewModel() {
     }
     @RequiresApi(Build.VERSION_CODES.O)
     fun onGoalSelected(goal : Goal){
-        _uiState.update { it.copy(userDetails = it.userDetails.copy(goal = goal)) }
+        if(goal !== Goal.LOSE_WEIGHT){
+            _unSupportedGoal.value = goal
+        } else {
+            _uiState.update { it.copy(userDetails = it.userDetails.copy(goal = goal)) }
+        }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun onDismissUnsupportedGoal(){
+        _uiState.update { it.copy(userDetails = it.userDetails.copy(goal = Goal.LOSE_WEIGHT)) }
+        _unSupportedGoal.value = null
+
+    }
+
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun onNameChanged(name : String){
         _uiState.update { it.copy(userDetails = it.userDetails.copy(name = name)) }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
 @Composable
 fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
     val uiState by viewModel.uiState.collectAsState()
+    val unSupportedGoal by viewModel.unSupportedGoal.collectAsState()
 
      Box(
          modifier = Modifier.fillMaxSize()
@@ -44,7 +46,8 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
              primaryText = "Select your goal, Pleasee?",
              stepIconRes = 12,
              modifier = Modifier.align(Alignment.TopCenter)
-         ) {
+         )
+         {
              Column(
                  modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
                  verticalArrangement = Arrangement.spacedBy(18.dp),
@@ -77,16 +80,30 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
                  }
 
              }
-
          }
-
 
          Button(
              onClick = {viewModel.goToNextStep()},
              modifier = Modifier.fillMaxWidth( ).align(Alignment.BottomCenter)
-         ) {
+         )
+         {
              Text("Next")
          }
+
+         if(unSupportedGoal != null){
+             AlertDialog(
+                 title = {Text("UnSupported Goal")},
+                 text = { Text("Currently we only support weight loss plans. Selecting ${unSupportedGoal} will default to weight loss. Support for other goals is coming soon.") },
+                 onDismissRequest = {},
+                confirmButton = {
+                    Button(onClick = {viewModel.onDismissUnsupportedGoal()}) {
+                        Text("Ok")
+                 }
+             }
+             )
+         }
+
+
      }
 
 }
