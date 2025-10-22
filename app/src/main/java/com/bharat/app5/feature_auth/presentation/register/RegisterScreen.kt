@@ -1,6 +1,7 @@
 package com.bharat.app5.feature_auth.presentation.register
 
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -33,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
 import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.google.firebase.firestore.bundle.BundleReader
@@ -41,9 +43,19 @@ import com.google.firebase.firestore.bundle.BundleReader
 @Composable
 fun RegisterScreen(
 onRegisterSuccess : () -> Unit,
+onExit : () -> Unit,
 viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    BackHandler {
+        val currentStep = uiState.currentStep
+        if(currentStep == RegistrationStep.GENDER_STEP){
+            onExit
+        } else {
+            viewModel.goToPreviousStep()
+        }
+    }
 
     Scaffold { paddingValues ->
 
@@ -65,9 +77,7 @@ viewModel: RegisterViewModel = viewModel()
                         } else {
                             slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
                                     slideOutHorizontally(targetOffsetX =  { it }) + fadeOut()
-
                         }
-
                     }
                 ) { targetState ->
                     Box(

@@ -82,24 +82,16 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
              }
          }
 
-         Row(
-             modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
-             horizontalArrangement = Arrangement.SpaceBetween
-         ){
+
              Button(
-                 onClick = {viewModel.goToPreviousStep()},
-             )
-             {
-                 Text("Back")
-             }
-             Button(
+                 modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
                  onClick = {viewModel.goToNextStep()},
              )
              {
                  Text("Next")
              }
 
-         }
+
 
 
 

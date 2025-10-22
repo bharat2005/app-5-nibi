@@ -1,5 +1,7 @@
 package com.bharat.app5.feature_auth.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -12,6 +14,7 @@ import com.bharat.app5.feature_auth.presentation.start.StartScreen
 
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authNavGraph(navController: NavController){
     navigation(
         route = ScreenRoutes.AuthScreenRoute,
@@ -26,13 +29,16 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
 
         composable(AuthScreenRoutes.Register) {
             RegisterScreen(
-            onRegisterSuccess = {
+                onRegisterSuccess = {
                 navController.navigate(ScreenRoutes.MainScreenRoute){
                     popUpTo(ScreenRoutes.AuthScreenRoute){
                         inclusive = true
                     }
                 }
-            }
+            },
+                onExit = {
+                    navController.navigateUp()
+                }
 
         ) }
 
