@@ -84,6 +84,7 @@ fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiSt
         }
 
         Button(
+            enabled = uiState.userDetails.gender != null,
             modifier =  Modifier.fillMaxWidth().align(Alignment.BottomCenter),
             onClick = {viewModel.goToNextStep()}
         ) {

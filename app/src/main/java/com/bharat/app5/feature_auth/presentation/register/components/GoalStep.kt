@@ -85,6 +85,7 @@ fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiStat
 
 
              Button(
+                 enabled = uiState.userDetails.goal != null,
                  modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
                  onClick = {viewModel.goToNextStep()},
              )
