@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,12 +32,12 @@ import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.unit.dp
 import com.bharat.app5.feature_auth.domain.model.Goal
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
+import com.bharat.app5.feature_auth.presentation.register.RegisterUiState
 import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
-    val uiState by viewModel.uiState.collectAsState()
+fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState : RegisterUiState) {
     val unSupportedGoal by viewModel.unSupportedGoal.collectAsState()
 
      Box(

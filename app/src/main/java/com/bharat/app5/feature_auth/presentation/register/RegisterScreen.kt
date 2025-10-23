@@ -37,6 +37,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
 import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
+import com.bharat.app5.feature_auth.presentation.register.components.NameStep
 import com.google.firebase.firestore.bundle.BundleReader
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -65,30 +66,32 @@ viewModel: RegisterViewModel = viewModel()
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
+                //progress bar
                 Spacer(modifier = Modifier.height(50.dp))
 
-                AnimatedContent(
-                    targetState = uiState.currentStep,
-
-                    transitionSpec = {
-                        if(targetState.ordinal > initialState.ordinal){
-                            slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
-                                    slideOutHorizontally(targetOffsetX =  { -it }) + fadeOut()
-                        } else {
-                            slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
-                                    slideOutHorizontally(targetOffsetX =  { it }) + fadeOut()
+                //step content
+                    AnimatedContent(
+                        targetState = uiState.currentStep,
+                        transitionSpec = {
+                            if (targetState.ordinal > initialState.ordinal) {
+                                slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                                        slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+                            } else {
+                                slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
+                                        slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
+                            }
                         }
-                    }
-                ) { targetState ->
-                    Box(
-                        modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp).padding(bottom = 24.dp)
-                    ) {
+                    ) { targetState ->
+                        Box(
+                            modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp)
+                                .padding(bottom = 24.dp)
+                        ) {
                         when (targetState) {
-                            RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel)
+                            RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.GOAL_STEP -> GoalStep(viewModel= viewModel)
+                            RegistrationStep.GOAL_STEP -> GoalStep(viewModel = viewModel,  uiState = uiState)
 
-                            RegistrationStep.NAME_STEP -> null
+                            RegistrationStep.NAME_STEP -> NameStep(viewModel = viewModel, uiState = uiState)
 
                             RegistrationStep.DOB_STEP -> null
 
@@ -101,6 +104,7 @@ viewModel: RegisterViewModel = viewModel()
                         }
                     }
                 }
+
             }
 
         }

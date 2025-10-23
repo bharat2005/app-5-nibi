@@ -39,7 +39,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                 onExit = {
                     navController.navigateUp()
                 }
-
         ) }
 
         composable(AuthScreenRoutes.Login) {

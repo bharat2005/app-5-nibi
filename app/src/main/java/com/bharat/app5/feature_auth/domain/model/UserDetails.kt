@@ -10,7 +10,7 @@ enum class Goal(val displayName : String) { LOSE_WEIGHT("Lose Weight"), GAIN_WEI
 data class UserDetails @RequiresApi(Build.VERSION_CODES.O) constructor(
     val gender : Gender? = null,
     val goal : Goal? = null,
-    val name : String? = "",
+    val name : String = "",
     val dob : LocalDate = LocalDate.of(2000,1,1),
     val height : Double? = 0.0,
     val weight : Double? = 0.0

@@ -20,6 +20,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,13 +32,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bharat.app5.feature_auth.domain.model.Gender
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
+import com.bharat.app5.feature_auth.presentation.register.RegisterUiState
 import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
 import com.bharat.app5.feature_auth.presentation.register.RegistrationStep
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel) {
-     val uiState by viewModel.uiState.collectAsState()
+fun GenderStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState : RegisterUiState) {
 
     Box(
         modifier = Modifier.fillMaxSize(),
