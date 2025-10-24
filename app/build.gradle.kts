@@ -69,4 +69,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
 
+    //wheelpicker
+    implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
+
 }

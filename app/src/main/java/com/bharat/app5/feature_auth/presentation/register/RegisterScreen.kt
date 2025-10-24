@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -35,6 +36,7 @@ import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
+import com.bharat.app5.feature_auth.presentation.register.components.DobStep
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
 import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.bharat.app5.feature_auth.presentation.register.components.NameStep
@@ -93,9 +95,9 @@ viewModel: RegisterViewModel = viewModel()
 
                             RegistrationStep.NAME_STEP -> NameStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.DOB_STEP -> null
+                            RegistrationStep.DOB_STEP -> DobStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.HEIGHT_STEP -> null
+                            RegistrationStep.HEIGHT_STEP -> HeightStep(viewModel = viewModel, uiState = uiState)
 
                             RegistrationStep.WEIGHT_STEP -> null
 
