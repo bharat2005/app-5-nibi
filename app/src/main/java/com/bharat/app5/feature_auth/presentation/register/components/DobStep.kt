@@ -54,7 +54,7 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
         ) {
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 12.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 26.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // Month Wheel
@@ -67,9 +67,10 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
                             wrapSelectorWheel = true
                             setOnValueChangedListener { _, _, newValue ->
                                 val newDob = safeDate(
-                                    dob.year,
+                                    dob.dayOfMonth,
                                     newValue,
-                                    dob.dayOfMonth
+                                    dob.year
+
                                 )
                                 viewModel.onDobChanged(newDob)
 
@@ -77,9 +78,7 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
 
                         }
                     },
-                    update = { picker ->
-                        if(picker.value != dob.monthValue) picker.value = dob.monthValue
-                    }
+
                 )
                 // Day Wheel
                 AndroidView(
@@ -99,10 +98,7 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
                             }
                         }
                     },
-                    update = {picker ->
-                        if(picker.maxValue != dob.lengthOfMonth()) picker.maxValue = dob.lengthOfMonth()
-                        if(picker.value != dob.dayOfMonth) picker.value = dob.dayOfMonth
-                    }
+
                 )
                 //Year Wheel
                 AndroidView(
@@ -122,9 +118,7 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
                             }
                         }
                     },
-                    update = {picker ->
-                        if(picker.value != dob.year) picker.value = dob.year
-                    }
+
                 )
 
             }
