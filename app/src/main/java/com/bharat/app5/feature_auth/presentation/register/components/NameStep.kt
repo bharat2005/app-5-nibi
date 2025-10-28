@@ -54,7 +54,10 @@ fun NameStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiStat
                 TextField(
                     singleLine = true,
                     value = uiState.userDetails.name,
-                    onValueChange = {viewModel.onNameChanged(it)},
+                    onValueChange = {
+                        if(it.length <= 15) {
+                            viewModel.onNameChanged(it)
+                        }},
                     modifier = Modifier.focusRequester(focusRequester).padding(0.dp),
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Color.Transparent,

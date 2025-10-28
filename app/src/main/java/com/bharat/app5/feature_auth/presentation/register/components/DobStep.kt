@@ -50,7 +50,7 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
                 contentAlignment = Alignment.Center
             ){
                 WheelDatePicker(
-                    size = DpSize(maxWidth - 18.dp , 180.dp),
+                    size = DpSize(maxWidth , 180.dp),
                     startDate = uiState.userDetails.dob,
                     rowCount = 5,
                     minDate = LocalDate.of(1950, 1,1),

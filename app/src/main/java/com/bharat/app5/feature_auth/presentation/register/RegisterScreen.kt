@@ -39,6 +39,7 @@ import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHold
 import com.bharat.app5.feature_auth.presentation.register.components.DobStep
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
 import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
+import com.bharat.app5.feature_auth.presentation.register.components.HeightStep
 import com.bharat.app5.feature_auth.presentation.register.components.NameStep
 import com.google.firebase.firestore.bundle.BundleReader
 
