@@ -14,13 +14,19 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -34,9 +40,20 @@ import com.bharat.app5.feature_auth.presentation.register.RegistrationStep
 @Composable
 fun NameStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState : RegisterUiState) {
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    var nameValue by remember(uiState.userDetails.name) {
+        mutableStateOf(
+            TextFieldValue(
+                text = uiState.userDetails.name,
+                selection = TextRange(uiState.userDetails.name.length)
+            )
+        )
+    }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+        keyboardController?.show()
     }
 
 
@@ -53,10 +70,10 @@ fun NameStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiStat
             ){
                 TextField(
                     singleLine = true,
-                    value = uiState.userDetails.name,
+                    value = nameValue,
                     onValueChange = {
-                        if(it.length <= 15) {
-                            viewModel.onNameChanged(it)
+                        if(it.text.length <= 15) {
+                            viewModel.onNameChanged(it.text)
                         }},
                     modifier = Modifier.focusRequester(focusRequester).padding(0.dp),
                     colors = TextFieldDefaults.colors(
@@ -76,7 +93,10 @@ fun NameStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiStat
         Button(
             enabled = uiState.userDetails.name.isNotEmpty(),
             modifier = Modifier.fillMaxWidth().align(alignment = Alignment.BottomCenter),
-            onClick = {viewModel.goToNextStep()}
+            onClick = {
+                keyboardController?.hide()
+                viewModel.goToNextStep()
+            }
         ) {
             Text("Next")
         }

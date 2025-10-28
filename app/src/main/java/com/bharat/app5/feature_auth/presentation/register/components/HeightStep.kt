@@ -1,7 +1,12 @@
 package com.bharat.app5.feature_auth.presentation.register.components
 
 import android.os.Build
+import android.service.autofill.TextValueSanitizer
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -13,12 +18,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,6 +38,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
 import com.bharat.app5.feature_auth.presentation.register.RegisterUiState
 import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
@@ -43,9 +54,16 @@ fun HeightStep(
     uiState : RegisterUiState
 ) {
     val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    var heightText by remember { mutableStateOf(viewModel.uiState.value.userDetails.height?.toString() ?: "") }
+    var heigthError by remember { mutableStateOf<String?>(null)}
+
+    val heightValue = heightText.toDoubleOrNull()
+    val isButtonEnabled = heightValue != null
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+        keyboardController?.show()
     }
     Box(
         modifier = Modifier.fillMaxSize().imePadding()
@@ -63,12 +81,12 @@ fun HeightStep(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.focusRequester(focusRequester).width(100.dp).padding(horizontal = 4.dp),
-                    value = if(uiState.userDetails.height == null) "" else uiState.userDetails.height.toString(),
-                    placeholder = {Text("0.0")},
-                    onValueChange = {
-                        it.toDoubleOrNull()?.let {
-                            val heightText = it
-                            viewModel.onHeightChanged(heightText)
+                    value = heightText,
+                    onValueChange = { newValue ->
+                        val regex = """^\d{0,6}\.?\d{0,1}$""".toRegex()
+                        if(newValue.matches(regex)){
+                            heightText = newValue
+                            heigthError = null
                         }
                         },
                     textStyle = TextStyle(textAlign = TextAlign.Center),
@@ -76,15 +94,37 @@ fun HeightStep(
                 )
                 Text("cm")
             }
+
+            AnimatedVisibility(
+                visible = heigthError != null,
+                enter = fadeIn(animationSpec = tween(600)),
+                exit = fadeOut(animationSpec = tween(600))
+            ) {
+                Text(heigthError ?: "", color = Color.Red)
+            }
+
+
+
         }
         Button(
+            enabled = isButtonEnabled,
             modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
-            onClick = {viewModel.goToNextStep() }
+            onClick = {
+                if(heightValue == null) return@Button
+                if (heightValue !in 80.0..250.0){
+                    heigthError = "Please enter a height between 80.0 cm and 250.0 cm"
+                } else {
+                    heigthError = null
+                    viewModel.onHeightChanged(heightValue)
+                    keyboardController?.hide()
+                    viewModel.goToNextStep()
+
+                }
+
+            }
         ) {
             Text("Next")
         }
     }
-
-
 
 }

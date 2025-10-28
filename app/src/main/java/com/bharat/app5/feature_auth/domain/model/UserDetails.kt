@@ -9,9 +9,9 @@ enum class Goal(val displayName : String) { LOSE_WEIGHT("Lose Weight"), GAIN_WEI
 
 data class UserDetails @RequiresApi(Build.VERSION_CODES.O) constructor(
     val gender : Gender? = null,
-    val goal : Goal? = Goal.LOSE_WEIGHT,
+    val goal : Goal? = null,
     val name : String = "",
     val dob : LocalDate = LocalDate.of(2005,5,25),
-    val height : Double? = 0.0,
-    val weight : Double? = 0.0
+    val height : Double? = null,
+    val weight : Double? = null
 )
