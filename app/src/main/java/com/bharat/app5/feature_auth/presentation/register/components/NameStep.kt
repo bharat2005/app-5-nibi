@@ -42,7 +42,7 @@ fun NameStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiStat
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var nameValue by remember(uiState.userDetails.name) {
+    var nameTextValue by remember(uiState.userDetails.name) {
         mutableStateOf(
             TextFieldValue(
                 text = uiState.userDetails.name,
@@ -70,7 +70,7 @@ fun NameStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiStat
             ){
                 TextField(
                     singleLine = true,
-                    value = nameValue,
+                    value = nameTextValue,
                     onValueChange = {
                         if(it.text.length <= 15) {
                             viewModel.onNameChanged(it.text)

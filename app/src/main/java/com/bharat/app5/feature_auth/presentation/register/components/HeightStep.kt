@@ -2,6 +2,7 @@ package com.bharat.app5.feature_auth.presentation.register.components
 
 import android.os.Build
 import android.service.autofill.TextValueSanitizer
+import android.view.textclassifier.TextSelection
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -40,6 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
 import com.bharat.app5.feature_auth.presentation.register.RegisterUiState
@@ -55,11 +58,21 @@ fun HeightStep(
 ) {
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
-    var heightText by remember { mutableStateOf(viewModel.uiState.value.userDetails.height?.toString() ?: "") }
+
+    var heightTextValue by remember(uiState.userDetails.height) {
+        mutableStateOf(
+            TextFieldValue(
+                text = uiState.userDetails.height?.toString() ?: "",
+                selection = TextRange(uiState.userDetails.height.toString().length)
+            )
+        )
+    }
     var heigthError by remember { mutableStateOf<String?>(null)}
 
-    val heightValue = heightText.toDoubleOrNull()
+    val heightValue = heightTextValue.text.toDoubleOrNull()
     val isButtonEnabled = heightValue != null
+
+
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -81,15 +94,17 @@ fun HeightStep(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.focusRequester(focusRequester).width(100.dp).padding(horizontal = 4.dp),
-                    value = heightText,
+                    value = heightTextValue,
                     onValueChange = { newValue ->
                         val regex = """^\d{0,6}\.?\d{0,1}$""".toRegex()
-                        if(newValue.matches(regex)){
-                            heightText = newValue
+                        if(newValue.text.matches(regex)){
+                            heightTextValue = newValue.copy(
+                                selection = TextRange(newValue.text.length)
+                            )
                             heigthError = null
                         }
                         },
-                    textStyle = TextStyle(textAlign = TextAlign.Center),
+                    textStyle = TextStyle(textAlign = TextAlign.Center, fontSize = 18.sp),
                     colors = TextFieldDefaults.colors(focusedContainerColor = Color.Transparent, unfocusedContainerColor = Color.Transparent)
                 )
                 Text("cm")
