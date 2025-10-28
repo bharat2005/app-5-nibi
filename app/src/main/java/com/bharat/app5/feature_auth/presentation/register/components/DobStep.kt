@@ -1,5 +1,6 @@
 package com.bharat.app5.feature_auth.presentation.register.components
 
+import android.R
 import android.icu.util.LocaleData
 import android.os.Build
 import android.widget.NumberPicker
@@ -18,6 +19,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,6 +43,7 @@ import com.commandiron.wheel_picker_compose.core.TimeFormat
 import com.commandiron.wheel_picker_compose.core.WheelPickerDefaults
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.Year
 import java.time.YearMonth
 import java.util.Locale
 
@@ -44,6 +51,17 @@ import java.util.Locale
 @Composable
 fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState : RegisterUiState) {
     val dob = uiState.userDetails.dob
+
+    var selectedDay by remember { mutableStateOf(dob.dayOfMonth) }
+    var selectedMonth by remember { mutableStateOf(dob.monthValue)}
+    var selectedYear by remember { mutableStateOf(dob.year)}
+
+    LaunchedEffect(dob) {
+        selectedYear = dob.year
+        selectedMonth = dob.monthValue
+        selectedDay = dob.dayOfMonth
+    }
+
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -54,22 +72,28 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
         ) {
 
             Row(
-                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 26.dp),
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp, horizontal = 38.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // Month Wheel
                 AndroidView(
                     factory = { context ->
                         NumberPicker(context).apply {
+                            val monthNames = arrayOf(
+                                "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+                            )
                             minValue = 1
                             maxValue = 12
-                            value = dob.monthValue
+                            displayedValues = monthNames
+                            value = selectedMonth
                             wrapSelectorWheel = true
                             setOnValueChangedListener { _, _, newValue ->
+                                selectedMonth = newValue
                                 val newDob = safeDate(
-                                    dob.dayOfMonth,
+                                    selectedDay,
                                     newValue,
-                                    dob.year
+                                    selectedYear
 
                                 )
                                 viewModel.onDobChanged(newDob)
@@ -78,27 +102,33 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
 
                         }
                     },
-
+                    update = { picker ->
+                        if(picker.value != selectedMonth) picker.value = selectedMonth
+                    }
                 )
                 // Day Wheel
                 AndroidView(
                     factory = { context ->
                         NumberPicker(context).apply {
                             minValue = 1
-                            maxValue = dob.dayOfMonth
-                            value = dob.dayOfMonth
+                            maxValue = YearMonth.of(selectedYear, selectedMonth).lengthOfMonth()
+                            value = selectedDay
                             wrapSelectorWheel = true
                             setOnValueChangedListener { _, _, newValue ->
+                                selectedDay = newValue
                                 val newDob = safeDate(
                                     newValue,
-                                    dob.monthValue,
-                                    dob.year
+                                    selectedMonth,
+                                    selectedYear
                                 )
                                 viewModel.onDobChanged(newDob)
                             }
                         }
                     },
-
+                    update = {picker ->
+                        if(picker.maxValue != YearMonth.of(selectedYear, selectedMonth).lengthOfMonth()) picker.maxValue = YearMonth.of(selectedYear, selectedMonth).lengthOfMonth()
+                        if(picker.value != selectedDay) picker.value = selectedDay
+                    }
                 )
                 //Year Wheel
                 AndroidView(
@@ -106,19 +136,21 @@ fun DobStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState
                         NumberPicker(context).apply{
                             minValue = 1950
                             maxValue = 2010
-                            value = dob.year
+                            value = selectedYear
                             wrapSelectorWheel = true
                             setOnValueChangedListener { _, _, newValue ->
                                 val newDob = safeDate(
-                                    dob.dayOfMonth,
-                                    dob.monthValue,
+                                    selectedDay,
+                                    selectedMonth,
                                     newValue
                                 )
                                 viewModel.onDobChanged(newDob)
                             }
                         }
                     },
-
+                    update = {picker ->
+                        if(picker.value != selectedYear) picker.value = selectedYear
+                    }
                 )
 
             }
