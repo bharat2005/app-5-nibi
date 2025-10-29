@@ -101,7 +101,7 @@ viewModel: RegisterViewModel = viewModel()
 
                             RegistrationStep.HEIGHT_STEP -> HeightStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.WEIGHT_STEP -> WeightStep()
+                            RegistrationStep.WEIGHT_STEP -> WeightStep(viewModel = viewModel, uiState = uiState)
 
                             RegistrationStep.AUTH_STEP -> null
 
