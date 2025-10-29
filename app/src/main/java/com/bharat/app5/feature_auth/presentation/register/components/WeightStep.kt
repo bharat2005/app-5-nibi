@@ -52,18 +52,18 @@ fun WeightStep(
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var heightTextValue by remember(uiState.userDetails.height) {
+    var weightTextValue by remember(uiState.userDetails.weight) {
         mutableStateOf(
             TextFieldValue(
-                text = uiState.userDetails.height?.toString() ?: "",
-                selection = TextRange(uiState.userDetails.height.toString().length)
+                text = uiState.userDetails.weight?.toString() ?: "",
+                selection = TextRange(uiState.userDetails.weight.toString().length)
             )
         )
     }
-    var heigthError by remember { mutableStateOf<String?>(null)}
+    var weightError by remember { mutableStateOf<String?>(null)}
 
-    val heightValue = heightTextValue.text.toDoubleOrNull()
-    val isButtonEnabled = heightValue != null
+    val weightValue = weightTextValue.text.toDoubleOrNull()
+    val isButtonEnabled = weightValue != null
 
 
 
@@ -88,14 +88,14 @@ fun WeightStep(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.focusRequester(focusRequester).width(100.dp),
-                    value = heightTextValue,
+                    value = weightTextValue,
                     onValueChange = { newValue ->
                         val regex = """^\d{0,6}\.?\d{0,1}$""".toRegex()
                         if(newValue.text.matches(regex)){
-                            heightTextValue = newValue.copy(
+                            weightTextValue = newValue.copy(
                                 selection = TextRange(newValue.text.length)
                             )
-                            heigthError = null
+                            weightError = null
                         }
                     },
                     textStyle = TextStyle(textAlign = TextAlign.Center, fontSize = 18.sp),
@@ -105,11 +105,11 @@ fun WeightStep(
             }
 
             AnimatedVisibility(
-                visible = heigthError != null,
+                visible = weightError != null,
                 enter = fadeIn(animationSpec = tween(600)),
                 exit = fadeOut(animationSpec = tween(600))
             ) {
-                Text(heigthError ?: "", color = Color.Red)
+                Text(weightError ?: "", color = Color.Red)
             }
 
 
@@ -119,12 +119,12 @@ fun WeightStep(
             enabled = isButtonEnabled,
             modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
             onClick = {
-                if(heightValue == null) return@Button
-                if (heightValue !in 10.0..200.0){
-                    heigthError = "Please enter a height between 10.0 kg and 200.0 kg"
+                if(weightValue == null) return@Button
+                if (weightValue !in 10.0..200.0){
+                    weightError = "Please enter a height between 10.0 kg and 200.0 kg"
                 } else {
-                    heigthError = null
-                    viewModel.onHeightChanged(heightValue)
+                    weightError = null
+                    viewModel.onHeightChanged(weightValue)
                     keyboardController?.hide()
                     viewModel.goToNextStep()
 
