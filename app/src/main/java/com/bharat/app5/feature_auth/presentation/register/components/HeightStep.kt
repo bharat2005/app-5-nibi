@@ -78,6 +78,7 @@ fun HeightStep(
         focusRequester.requestFocus()
         keyboardController?.show()
     }
+
     Box(
         modifier = Modifier.fillMaxSize().imePadding()
     ){
@@ -88,12 +89,12 @@ fun HeightStep(
             Row(
                 modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.spacedBy(18.dp, alignment = Alignment.CenterHorizontally)
             ){
                 TextField(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.focusRequester(focusRequester).width(100.dp).padding(horizontal = 4.dp),
+                    modifier = Modifier.focusRequester(focusRequester).width(100.dp),
                     value = heightTextValue,
                     onValueChange = { newValue ->
                         val regex = """^\d{0,6}\.?\d{0,1}$""".toRegex()

@@ -41,6 +41,7 @@ import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
 import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.bharat.app5.feature_auth.presentation.register.components.HeightStep
 import com.bharat.app5.feature_auth.presentation.register.components.NameStep
+import com.bharat.app5.feature_auth.presentation.register.components.WeightStep
 import com.google.firebase.firestore.bundle.BundleReader
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -100,7 +101,7 @@ viewModel: RegisterViewModel = viewModel()
 
                             RegistrationStep.HEIGHT_STEP -> HeightStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.WEIGHT_STEP -> null
+                            RegistrationStep.WEIGHT_STEP -> WeightStep()
 
                             RegistrationStep.AUTH_STEP -> null
 
