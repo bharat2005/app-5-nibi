@@ -124,7 +124,7 @@ fun WeightStep(
                     weightError = "Please enter a height between 10.0 kg and 200.0 kg"
                 } else {
                     weightError = null
-                    viewModel.onHeightChanged(weightValue)
+                    viewModel.onWeightChanged(weightValue)
                     keyboardController?.hide()
                     viewModel.goToNextStep()
 
