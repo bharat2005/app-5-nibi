@@ -36,12 +36,14 @@ import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
+import com.bharat.app5.feature_auth.presentation.register.components.AuthStep
 import com.bharat.app5.feature_auth.presentation.register.components.DobStep
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
 import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.bharat.app5.feature_auth.presentation.register.components.HeightStep
 import com.bharat.app5.feature_auth.presentation.register.components.NameStep
 import com.bharat.app5.feature_auth.presentation.register.components.WeightStep
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.firestore.bundle.BundleReader
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -52,6 +54,10 @@ onExit : () -> Unit,
 viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+
+    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestEmail()
+        .requestIdToken()
 
     BackHandler {
         val currentStep = uiState.currentStep
@@ -103,7 +109,7 @@ viewModel: RegisterViewModel = viewModel()
 
                             RegistrationStep.WEIGHT_STEP -> WeightStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.AUTH_STEP -> null
+                            RegistrationStep.AUTH_STEP -> AuthStep(onGoogleRegisterClick = { })
 
                         }
                     }
