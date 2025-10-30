@@ -72,4 +72,7 @@ dependencies {
     //wheelpicker
     implementation("com.github.commandiron:WheelPickerCompose:1.1.11")
 
+    //playservice
+    implementation("com.google.android.gms:play-services-auth:21.4.0")
+
 }

@@ -2,6 +2,8 @@ package com.bharat.app5.feature_auth.presentation.register
 
 import android.os.Build
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
@@ -28,11 +30,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.ModifierLocalReadScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
@@ -45,6 +49,7 @@ import com.bharat.app5.feature_auth.presentation.register.components.NameStep
 import com.bharat.app5.feature_auth.presentation.register.components.WeightStep
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.firestore.bundle.BundleReader
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -54,10 +59,26 @@ onExit : () -> Unit,
 viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
-    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestEmail()
-        .requestIdToken()
+    val googleSignInLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ){ result ->
+
+    }
+
+    val gso = remember {
+        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            //  .requestIdToken("")
+            .build()
+    }
+
+    val gsc = remember {
+        GoogleSignIn.getClient(context, gso)
+    }
+
+
 
     BackHandler {
         val currentStep = uiState.currentStep
@@ -109,7 +130,9 @@ viewModel: RegisterViewModel = viewModel()
 
                             RegistrationStep.WEIGHT_STEP -> WeightStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.AUTH_STEP -> AuthStep(onGoogleRegisterClick = { })
+                            RegistrationStep.AUTH_STEP -> AuthStep(onGoogleRegisterClick = {
+                                googleSignInLauncher.launch(gsc.signInIntent)
+                            })
 
                         }
                     }
