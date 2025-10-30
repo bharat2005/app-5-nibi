@@ -2,6 +2,7 @@ package com.bharat.app5.feature_auth.presentation.register
 
 import android.app.Activity
 import android.os.Build
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,6 +30,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -65,7 +67,13 @@ viewModel: RegisterViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    val accountDetails = remember { mutableStateOf<GoogleSignInAccount?>(null) }
+    LaunchedEffect(uiState.registrationError) {
+        if(uiState.registrationError != null){
+            Toast.makeText(context, uiState.registrationError, Toast.LENGTH_LONG)
+        }
+    }
+
+
 
     val googleSignInLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
@@ -74,15 +82,17 @@ viewModel: RegisterViewModel = viewModel()
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try{
                 val account = task.getResult(ApiException::class.java)
-                accountDetails.value = account
+
             }catch (e : ApiException){
 
             }
         } else {
+            viewModel.onRegistrationError("Google SignIn failed or cancelled!")
 
         }
 
     }
+
 
     val googleSignInOptions = remember {
         GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -149,7 +159,7 @@ viewModel: RegisterViewModel = viewModel()
 
                             RegistrationStep.AUTH_STEP -> AuthStep(onGoogleRegisterClick = {
                                 googleSignInLauncher.launch(googleSignInClient.signInIntent)
-                            }, accountDetials = accountDetails.value)
+                            })
 
                         }
                     }

@@ -39,7 +39,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 fun AuthStep(
     modifier: Modifier = Modifier,
     onGoogleRegisterClick : () -> Unit,
-    accountDetials : GoogleSignInAccount?
 ) {
 
     Column(
@@ -71,14 +70,6 @@ fun AuthStep(
                 onClick = onGoogleRegisterClick
             )
 
-
-            if(accountDetials != null) {
-
-                Text(accountDetials?.email!!)
-                Text(accountDetials?.photoUrl?.toString()!!)
-                Text(accountDetials?.displayName!!)
-                Text(accountDetials?.idToken!!)
-            }
 
 
 

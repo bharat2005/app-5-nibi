@@ -91,6 +91,11 @@ class RegisterViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    fun onRegistrationError(error : String){
+        _uiState.update { it.copy(isRegistering = false, registrationError = error, registrationSuccess = false) }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     fun goToNextStep(){
         val nextStep = when(_uiState.value.currentStep){
             RegistrationStep.GENDER_STEP -> RegistrationStep.GOAL_STEP
