@@ -72,10 +72,13 @@ fun AuthStep(
             )
 
 
-            Text(accountDetials?.email!!)
-          //  Text(accountDetials?.photoUrl!!)
-            Text(accountDetials?.displayName!!)
-            Text(accountDetials?.idToken!!)
+            if(accountDetials != null) {
+
+                Text(accountDetials?.email!!)
+                Text(accountDetials?.photoUrl?.toString()!!)
+                Text(accountDetials?.displayName!!)
+                Text(accountDetials?.idToken!!)
+            }
 
 
 
