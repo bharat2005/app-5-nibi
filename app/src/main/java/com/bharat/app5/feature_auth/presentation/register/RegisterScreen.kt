@@ -27,6 +27,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -35,6 +37,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,6 +59,7 @@ import com.google.firebase.firestore.bundle.BundleReader
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -67,9 +71,16 @@ viewModel: RegisterViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+
     LaunchedEffect(uiState.registrationError) {
         if(uiState.registrationError != null){
-            Toast.makeText(context, uiState.registrationError, Toast.LENGTH_LONG)
+         //   Toast.makeText(context, uiState.registrationError, Toast.LENGTH_LONG).show()
+          scope.launch {
+              snackBarHostState.showSnackbar(uiState.registrationError!!)
+          }
         }
     }
 
@@ -82,8 +93,15 @@ viewModel: RegisterViewModel = viewModel()
             val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
             try{
                 val account = task.getResult(ApiException::class.java)
+                val idToken = account?.idToken
+                if(idToken != null){
+
+                } else {
+                    viewModel.onRegistrationError("Failed to get Google Id Token")
+                }
 
             }catch (e : ApiException){
+                viewModel.onRegistrationError("Google signIn fialed with status code:${e.statusCode}")
 
             }
         } else {
@@ -116,7 +134,9 @@ viewModel: RegisterViewModel = viewModel()
         }
     }
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        snackbarHost = {SnackbarHost(snackBarHostState)}
+    ) { paddingValues ->
 
         Box(
             modifier = Modifier.fillMaxSize().padding(paddingValues).padding(top = 40.dp),
