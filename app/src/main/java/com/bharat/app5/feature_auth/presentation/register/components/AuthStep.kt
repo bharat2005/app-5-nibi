@@ -70,19 +70,6 @@ fun AuthStep(
             )
 
 
-            AuthButton(
-                modifier = Modifier.fillMaxWidth(0.9f),
-                borderColor = MaterialTheme.colorScheme.primary,
-                backgroundColor = MaterialTheme.colorScheme.primary,
-                contentColor = Color.White,
-                iconRes = R.drawable.mail_icon_button,
-                text = "Register with Email address",
-                onClick = {}
-            )
-
-
-
-
 
         }
     }

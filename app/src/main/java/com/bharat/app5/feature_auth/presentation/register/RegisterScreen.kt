@@ -3,6 +3,7 @@ package com.bharat.app5.feature_auth.presentation.register
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
@@ -47,6 +48,8 @@ import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.bharat.app5.feature_auth.presentation.register.components.HeightStep
 import com.bharat.app5.feature_auth.presentation.register.components.NameStep
 import com.bharat.app5.feature_auth.presentation.register.components.WeightStep
+import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.firestore.bundle.BundleReader
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -60,24 +63,26 @@ viewModel: RegisterViewModel = viewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+    val oneTapClient = remember { Identity.getSignInClient(context) }
 
-    val googleSignInLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ){ result ->
-
-    }
-
-    val gso = remember {
-        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            //  .requestIdToken("")
+    val signInRequest = remember {
+        BeginSignInRequest.builder()
+            .setGoogleIdTokenRequestOptions(
+                BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                    .setSupported(true)
+                    .setServerClientId("650451806359-uhmqi74fs2eh4ncprnpk2gokdjlcne17.apps.googleusercontent.com")
+                    .setFilterByAuthorizedAccounts(false)   // show all accounts
+                    .build()
+            )
+            .setAutoSelectEnabled(false)
             .build()
     }
 
-    val gsc = remember {
-        GoogleSignIn.getClient(context, gso)
-    }
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartIntentSenderForResult()
+    ) { result ->
 
+    }
 
 
     BackHandler {
@@ -131,8 +136,14 @@ viewModel: RegisterViewModel = viewModel()
                             RegistrationStep.WEIGHT_STEP -> WeightStep(viewModel = viewModel, uiState = uiState)
 
                             RegistrationStep.AUTH_STEP -> AuthStep(onGoogleRegisterClick = {
-                                googleSignInLauncher.launch(gsc.signInIntent)
-                            })
+                                oneTapClient.beginSignIn(signInRequest)
+                                    .addOnSuccessListener { result ->
+                                        launcher.launch(IntentSenderRequest.Builder(result.pendingIntent.intentSender).build())
+                                    }
+                                    .addOnFailureListener { e ->
+                                        e.printStackTrace()
+                                    }
+                            },)
 
                         }
                     }

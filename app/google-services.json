@@ -12,7 +12,20 @@
           "package_name": "com.bharat.app5"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "650451806359-0qioaj534tnmmmeh5g9q3ultcblm9bot.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bharat.app5",
+            "certificate_hash": "1c6b3c7f6f481901613c34a8c2916b5a5080573b"
+          }
+        },
+        {
+          "client_id": "650451806359-uhmqi74fs2eh4ncprnpk2gokdjlcne17.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAN2lKt5r53lKY2G-6BOdtCsY2CTvrBHpY"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650451806359-uhmqi74fs2eh4ncprnpk2gokdjlcne17.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
