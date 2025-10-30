@@ -33,11 +33,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 @Composable
 fun AuthStep(
     modifier: Modifier = Modifier,
-    onGoogleRegisterClick : () -> Unit
+    onGoogleRegisterClick : () -> Unit,
+    accountDetials : GoogleSignInAccount?
 ) {
 
     Column(
@@ -68,6 +70,15 @@ fun AuthStep(
                 text = "Register with Google",
                 onClick = onGoogleRegisterClick
             )
+
+
+            Text(accountDetials?.email!!)
+          //  Text(accountDetials?.photoUrl!!)
+            Text(accountDetials?.displayName!!)
+            Text(accountDetials?.idToken!!)
+
+
+
 
 
 
