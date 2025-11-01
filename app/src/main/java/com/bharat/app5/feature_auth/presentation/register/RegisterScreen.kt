@@ -20,10 +20,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
@@ -46,6 +48,8 @@ import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bharat.app5.feature_auth.data.repository.AuthRepositoryIml
+import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
 import com.bharat.app5.feature_auth.presentation.register.components.AuthStep
 import com.bharat.app5.feature_auth.presentation.register.components.DobStep
@@ -59,6 +63,7 @@ import com.google.firebase.firestore.bundle.BundleReader
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -66,23 +71,29 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
 onRegisterSuccess : () -> Unit,
 onExit : () -> Unit,
-viewModel: RegisterViewModel = viewModel()
 ) {
+    val viewModel : RegisterViewModel = viewModel(
+        factory = RegisterViewModel.Factory(
+            registerUserUseCase = RegisterUserUseCase(
+                repository = AuthRepositoryIml(
+                    auth = FirebaseAuth.getInstance()
+                )
+            )
+        )
+    )
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
-    val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
 
-
-    LaunchedEffect(uiState.registrationError) {
-        if(uiState.registrationError != null){
-         //   Toast.makeText(context, uiState.registrationError, Toast.LENGTH_LONG).show()
-          scope.launch {
-              snackBarHostState.showSnackbar(uiState.registrationError!!)
-          }
+    LaunchedEffect(uiState.registrationSuccess) {
+        if(uiState.registrationSuccess){
+            Toast.makeText(context, "Registraion SuccessFFull!!", Toast.LENGTH_LONG).show()
         }
     }
+
+
+
+
 
 
 
@@ -95,17 +106,17 @@ viewModel: RegisterViewModel = viewModel()
                 val account = task.getResult(ApiException::class.java)
                 val idToken = account?.idToken
                 if(idToken != null){
-
+                    viewModel.onGoogleSignInSuccess(idToken)
                 } else {
-                    viewModel.onRegistrationError("Failed to get Google Id Token")
+                    viewModel.onGoogleSignInError("Failed to get Google Id Token")
                 }
 
             }catch (e : ApiException){
-                viewModel.onRegistrationError("Google signIn fialed with status code:${e.statusCode}")
+                viewModel.onGoogleSignInError("Google signIn fialed with status code:${e.statusCode}")
 
             }
         } else {
-            viewModel.onRegistrationError("Google SignIn failed or cancelled!")
+            viewModel.onGoogleSignInError("Google SignIn failed or cancelled!")
 
         }
 
@@ -134,9 +145,7 @@ viewModel: RegisterViewModel = viewModel()
         }
     }
 
-    Scaffold(
-        snackbarHost = {SnackbarHost(snackBarHostState)}
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
 
         Box(
             modifier = Modifier.fillMaxSize().padding(paddingValues).padding(top = 40.dp),
@@ -186,6 +195,21 @@ viewModel: RegisterViewModel = viewModel()
                 }
 
             }
+
+
+            //Error Dialog
+        if(uiState.registrationError != null){
+            AlertDialog(
+                title = {Text("Notice")},
+                text = {Text(uiState.registrationError!!)},
+                onDismissRequest = {viewModel.onRegistrationErrorDismiss()},
+                confirmButton = {
+                    TextButton(
+                        onClick = {viewModel.onRegistrationErrorDismiss()},
+                    ) { Text("OK")}
+                }
+            )
+        }
 
         }
     }

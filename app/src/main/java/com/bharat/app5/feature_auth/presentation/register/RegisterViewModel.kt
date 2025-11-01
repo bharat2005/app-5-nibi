@@ -2,15 +2,25 @@ package com.bharat.app5.feature_auth.presentation.register
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.browser.trusted.Token
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.domain.model.Gender
 import com.bharat.app5.feature_auth.domain.model.Goal
 import com.bharat.app5.feature_auth.domain.model.UserDetails
+import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
+import com.google.android.gms.auth.GoogleAuthException
+import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 
@@ -35,7 +45,9 @@ data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
 )
 
 
-class RegisterViewModel : ViewModel() {
+class RegisterViewModel(
+    private val registerUserUseCase : RegisterUserUseCase
+) : ViewModel() {
 
     //UiState
     @RequiresApi(Build.VERSION_CODES.O)
@@ -47,6 +59,8 @@ class RegisterViewModel : ViewModel() {
     //Unsupported goal
     private val _unSupportedGoal = MutableStateFlow<Goal?>(null)
     val unSupportedGoal = _unSupportedGoal.asStateFlow()
+
+
 
 
 
@@ -91,10 +105,41 @@ class RegisterViewModel : ViewModel() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onRegistrationError(error : String){
+    fun onGoogleSignInError(error : String){
         _uiState.update { it.copy(isRegistering = false, registrationError = error, registrationSuccess = false) }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun onRegistrationErrorDismiss(){
+        _uiState.update { it.copy(isRegistering = false, registrationError = null, registrationSuccess = false) }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun onGoogleSignInSuccess(idToken : String){
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        submitRegistration(credential)
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun submitRegistration(credential: AuthCredential){
+        viewModelScope.launch{
+            registerUserUseCase(credential)
+                .onStart {
+                    _uiState.update { it.copy(isRegistering = true, registrationError = null, registrationSuccess = false) }
+                }.collect { result ->
+                result.fold(
+                    onSuccess = {
+                        _uiState.update { it.copy(isRegistering = false, registrationError = null, registrationSuccess = true) }
+                    },
+                    onFailure = { e ->
+                        _uiState.update { it.copy(isRegistering = false, registrationError = e.localizedMessage ?: "Something Went Wrong", registrationSuccess = false) }
+                    }
+                )
+            }
+
+        }
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     fun goToNextStep(){
         val nextStep = when(_uiState.value.currentStep){
@@ -111,6 +156,7 @@ class RegisterViewModel : ViewModel() {
         }
     }
 
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun goToPreviousStep(){
         val previouStep = when(_uiState.value.currentStep) {
@@ -124,6 +170,20 @@ class RegisterViewModel : ViewModel() {
         }
         if(previouStep != null){
             _uiState.update { it.copy(currentStep = previouStep) }
+        }
+
+    }
+
+    class Factory(
+        private val registerUserUseCase: RegisterUserUseCase
+    ) : ViewModelProvider.Factory {
+
+        override fun <T : ViewModel> create(modelClass : Class<T>) : T {
+            if(modelClass.isAssignableFrom(RegisterViewModel::class.java)){
+                return RegisterViewModel(registerUserUseCase) as T
+            }
+            throw IllegalArgumentException("Unknown ViewModel class")
+
         }
 
     }
