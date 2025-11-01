@@ -12,6 +12,7 @@ import com.bharat.app5.feature_auth.domain.model.Gender
 import com.bharat.app5.feature_auth.domain.model.Goal
 import com.bharat.app5.feature_auth.domain.model.UserDetails
 import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
+import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.google.android.gms.auth.GoogleAuthException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
@@ -32,7 +33,7 @@ enum class RegistrationStep {
     HEIGHT_STEP,
     WEIGHT_STEP,
     AUTH_STEP,
-   // EMAIL_AUTH_STEP,
+
 }
 
 
@@ -41,7 +42,7 @@ data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
     val registrationError : String? = null,
     val registrationSuccess : Boolean = false,
     val userDetails : UserDetails = UserDetails(),
-    val  currentStep : RegistrationStep = RegistrationStep.AUTH_STEP
+    val  currentStep : RegistrationStep = RegistrationStep.GENDER_STEP
 )
 
 
@@ -86,7 +87,6 @@ class RegisterViewModel(
     }
 
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun onNameChanged(name : String){
         _uiState.update { it.copy(userDetails = it.userDetails.copy(name = name)) }
@@ -124,7 +124,7 @@ class RegisterViewModel(
     @RequiresApi(Build.VERSION_CODES.O)
     private fun submitRegistration(credential: AuthCredential){
         viewModelScope.launch{
-            registerUserUseCase(credential)
+            registerUserUseCase(credential, uiState.value.userDetails)
                 .onStart {
                     _uiState.update { it.copy(isRegistering = true, registrationError = null, registrationSuccess = false) }
                 }.collect { result ->

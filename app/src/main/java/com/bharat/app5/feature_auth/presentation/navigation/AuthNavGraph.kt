@@ -18,7 +18,7 @@ import com.bharat.app5.feature_auth.presentation.start.StartScreen
 fun NavGraphBuilder.authNavGraph(navController: NavController){
     navigation(
         route = ScreenRoutes.AuthScreenRoute,
-        startDestination = AuthScreenRoutes.Register
+        startDestination = AuthScreenRoutes.Start
     ){
         composable(AuthScreenRoutes.Start) {
             StartScreen(

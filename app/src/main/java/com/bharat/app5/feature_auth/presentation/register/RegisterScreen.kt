@@ -64,6 +64,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -76,7 +77,8 @@ onExit : () -> Unit,
         factory = RegisterViewModel.Factory(
             registerUserUseCase = RegisterUserUseCase(
                 repository = AuthRepositoryIml(
-                    auth = FirebaseAuth.getInstance()
+                    auth = FirebaseAuth.getInstance(),
+                    firestore = FirebaseFirestore.getInstance()
                 )
             )
         )
