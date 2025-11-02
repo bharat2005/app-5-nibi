@@ -39,9 +39,9 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                 onExit = {
                     navController.navigateUp()
                 },
-                onTermsClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.TERMS_CONDITIONS.name}")},
-                onPrivacyPolicyClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.PRIVACY_POLICY.name}")},
-                onExternalTransmissionClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.EXTERNAL_TRANSMISSIONS.name}")}
+                onTermsClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.TERMS_CONDITIONS}")},
+                onPrivacyPolicyClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.PRIVACY_POLICY}")},
+                onExternalTransmissionClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.EXTERNAL_TRANSMISSIONS}")}
         ) }
 
         composable(AuthScreenRoutes.Login) {
