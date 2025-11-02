@@ -1,6 +1,7 @@
 package com.bharat.app5.feature_auth.presentation.register
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.browser.trusted.Token
 import androidx.compose.ui.Modifier
@@ -19,6 +20,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,7 +44,7 @@ data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
     val registrationError : String? = null,
     val registrationSuccess : Boolean = false,
     val userDetails : UserDetails = UserDetails(),
-    val  currentStep : RegistrationStep = RegistrationStep.GENDER_STEP
+    val currentStep : RegistrationStep = RegistrationStep.GENDER_STEP
 )
 
 
@@ -127,7 +129,8 @@ class RegisterViewModel(
             registerUserUseCase(credential, uiState.value.userDetails)
                 .onStart {
                     _uiState.update { it.copy(isRegistering = true, registrationError = null, registrationSuccess = false) }
-                }.collect { result ->
+                }
+                .collect { result ->
                 result.fold(
                     onSuccess = {
                         _uiState.update { it.copy(isRegistering = false, registrationError = null, registrationSuccess = true) }

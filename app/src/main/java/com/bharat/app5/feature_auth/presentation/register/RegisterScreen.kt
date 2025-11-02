@@ -1,7 +1,9 @@
 package com.bharat.app5.feature_auth.presentation.register
 
 import android.app.Activity
+
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -27,6 +29,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -47,10 +50,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.data.repository.AuthRepositoryIml
 import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
+import com.bharat.app5.feature_auth.presentation.login.LoginScreen
 import com.bharat.app5.feature_auth.presentation.register.components.AuthStep
 import com.bharat.app5.feature_auth.presentation.register.components.DobStep
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
@@ -156,7 +161,7 @@ onExit : () -> Unit,
                 modifier = Modifier.fillMaxSize()
             ) {
                 //progress bar
-                Spacer(modifier = Modifier.height(50.dp))
+                Box(modifier = Modifier.height(50.dp).background(Color.Black))
 
                 //step content
                     AnimatedContent(
@@ -212,6 +217,15 @@ onExit : () -> Unit,
                 }
             )
         }
+
+            if(uiState.isRegistering){
+                Dialog (
+                    onDismissRequest = {}
+                ){
+                    CircularProgressIndicator()
+                }
+
+            }
 
         }
     }
