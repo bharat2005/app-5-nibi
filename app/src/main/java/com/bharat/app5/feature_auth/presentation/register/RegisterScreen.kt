@@ -155,13 +155,13 @@ onExit : () -> Unit,
     Scaffold { paddingValues ->
 
         Box(
-            modifier = Modifier.fillMaxSize().padding(paddingValues).padding(top = 40.dp),
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
         ) {
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
                 //progress bar
-                Box(modifier = Modifier.height(50.dp).background(Color.Black))
+                Box(modifier = Modifier.height(80.dp).fillMaxWidth().background(Color.Black))
 
                 //step content
                     AnimatedContent(
@@ -177,8 +177,7 @@ onExit : () -> Unit,
                         }
                     ) { targetState ->
                         Box(
-                            modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp)
-                                .padding(bottom = 24.dp)
+                            modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp, vertical = 24.dp)
                         ) {
                         when (targetState) {
                             RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel, uiState = uiState)

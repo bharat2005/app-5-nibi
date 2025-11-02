@@ -1,6 +1,16 @@
 package com.bharat.app5.feature_auth.presentation.register.components
 
 import android.view.RoundedCorner
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandIn
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.shrinkOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +26,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -50,53 +61,38 @@ fun AuthStep(
     onGoogleRegisterClick : () -> Unit,
 ) {
     var isChecked by remember { mutableStateOf(false) }
+    var showError by remember { mutableStateOf(false)}
 
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ){
+        //Title Text
         Text(
             "Create an account and start diagnosing your personilised plan",
             fontSize = 20.sp,
             textAlign = TextAlign.Center
             )
 
-        // Checkbox Row
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = isChecked,
-                onCheckedChange = {
-                    isChecked = it
-                }
-            )
+            // CheckBox Row
+        AuthCheckBoxRow(
+            isChecked = isChecked,
+            onCheckedChanged = {
+                isChecked = it
+                if(it) showError = false
+            }
+        )
 
-            TextWithLinks(
-                onTermsClick = {},
-                onPrivacyPolicyClick = {},
-                onExternalTransmissionClick = {}
-            )
-        }
 
         // Error message
-        Row(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Icon(Icons.Default.Warning, contentDescription = null)
-            Text(
-                "Please review the above information and check \"I agree\" to proceed with the procedure.",
-                color = Color.Red,
-                fontSize = 18.sp
-            )
+        AuthErrorMessage(
+            showError = showError
+        )
 
-        }
 
+        //Auth Buttons
         Column(
-            modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AuthButton(
@@ -106,9 +102,23 @@ fun AuthStep(
                 contentColor = Color.Black,
                 iconRes = R.drawable.google_icon_button,
                 text = "Register with Google",
-                onClick = onGoogleRegisterClick
+                onClick = {
+                    if(isChecked){
+                        onGoogleRegisterClick()
+                    } else {
+                        showError = true
+                    }
+
+                }
             )
         }
+
     }
 
+}
+
+@Preview(showSystemUi = true)
+@Composable
+fun MyPreview(){
+    AuthStep(onGoogleRegisterClick = {})
 }

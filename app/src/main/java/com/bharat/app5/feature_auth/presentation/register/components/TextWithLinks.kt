@@ -61,7 +61,7 @@ fun TextWithLinks(
         },
         style = TextStyle(
             color = Color.Black,
-            fontSize = 18.sp
+            fontSize = 14.sp
         )
     )
 }
