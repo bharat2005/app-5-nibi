@@ -113,6 +113,8 @@ fun AuthStep(
             )
         }
 
+        Spacer(modifier = Modifier.height(18.dp))
+
         AuthOptionsDivider(modifier = Modifier.fillMaxWidth())
 
 
