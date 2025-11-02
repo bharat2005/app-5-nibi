@@ -113,6 +113,19 @@ fun AuthStep(
             )
         }
 
+        AuthOptionsDivider(modifier = Modifier.fillMaxWidth())
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 }
