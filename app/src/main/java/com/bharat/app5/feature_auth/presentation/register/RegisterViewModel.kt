@@ -44,7 +44,7 @@ data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
     val registrationError : String? = null,
     val registrationSuccess : Boolean = false,
     val userDetails : UserDetails = UserDetails(),
-    val currentStep : RegistrationStep = RegistrationStep.AUTH_STEP
+    val currentStep : RegistrationStep = RegistrationStep.GENDER_STEP
 )
 
 
