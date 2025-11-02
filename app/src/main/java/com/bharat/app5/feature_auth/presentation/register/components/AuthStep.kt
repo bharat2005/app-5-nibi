@@ -59,6 +59,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 fun AuthStep(
     modifier: Modifier = Modifier,
     onGoogleRegisterClick : () -> Unit,
+    onTermsClick : () -> Unit,
+    onPrivacyPolicyClick : () -> Unit,
+    onExternalTransmissionClick : () -> Unit
 ) {
     var isChecked by remember { mutableStateOf(false) }
     var showError by remember { mutableStateOf(false)}
@@ -80,7 +83,10 @@ fun AuthStep(
             onCheckedChanged = {
                 isChecked = it
                 if(it) showError = false
-            }
+            },
+            onTermsClick  = onTermsClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick,
+            onExternalTransmissionClick = onExternalTransmissionClick
         )
 
 
@@ -130,10 +136,4 @@ fun AuthStep(
 
     }
 
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun MyPreview(){
-    AuthStep(onGoogleRegisterClick = {})
 }

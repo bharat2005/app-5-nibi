@@ -13,7 +13,10 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun AuthCheckBoxRow(
     isChecked : Boolean,
-    onCheckedChanged : (Boolean) -> Unit
+    onCheckedChanged : (Boolean) -> Unit,
+    onTermsClick : () -> Unit,
+    onPrivacyPolicyClick : () -> Unit,
+    onExternalTransmissionClick : () -> Unit
 ) {
 
     Row(
@@ -27,9 +30,9 @@ fun AuthCheckBoxRow(
         )
 
         TextWithLinks(
-            onTermsClick = {},
-            onPrivacyPolicyClick = {},
-            onExternalTransmissionClick = {}
+            onTermsClick = onTermsClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick,
+            onExternalTransmissionClick = onExternalTransmissionClick
         )
     }
 

@@ -77,6 +77,9 @@ import kotlinx.coroutines.launch
 fun RegisterScreen(
 onRegisterSuccess : () -> Unit,
 onExit : () -> Unit,
+onTermsClick : () -> Unit,
+onPrivacyPolicyClick : () -> Unit,
+onExternalTransmissionClick : () -> Unit
 ) {
     val viewModel : RegisterViewModel = viewModel(
         factory = RegisterViewModel.Factory(
@@ -194,7 +197,11 @@ onExit : () -> Unit,
 
                             RegistrationStep.AUTH_STEP -> AuthStep(onGoogleRegisterClick = {
                                 googleSignInLauncher.launch(googleSignInClient.signInIntent)
-                            })
+                            },
+                                onTermsClick = onTermsClick,
+                                onPrivacyPolicyClick = onPrivacyPolicyClick,
+                                onExternalTransmissionClick = onExternalTransmissionClick
+                            )
 
                         }
                     }

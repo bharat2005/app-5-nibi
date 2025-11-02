@@ -21,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.bharat.app5.core.navigation.ScreenRoutes
 import com.bharat.app5.feature_auth.presentation.navigation.authNavGraph
+import com.bharat.app5.feature_legal.presentation.navigation.legalNavGraph
 import com.bharat.app5.feature_main.presentation.navigation.mainNavGraph
 import com.bharat.app5.ui.theme.App5Theme
 
@@ -39,7 +40,8 @@ class MainActivity : ComponentActivity() {
                         navController = navController,
                         startDestination = ScreenRoutes.AuthScreenRoute
                     ){
-                        authNavGraph(navController = navController)
+                        authNavGraph(navController)
+                        legalNavGraph(navController)
                         mainNavGraph(navController)
 
                     }
