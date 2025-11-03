@@ -4,10 +4,13 @@ import android.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -58,7 +61,7 @@ fun NameStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiStat
 
 
     Box(
-        modifier = Modifier.fillMaxSize().imePadding()
+        modifier = Modifier.fillMaxSize()
     ){
         RegistrationStepHolder(
             primaryText = "Enter you name please?",

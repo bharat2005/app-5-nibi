@@ -10,13 +10,15 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.bharat.app5.core.navigation.ScreenRoutes
-import com.bharat.app5.feature_auth.presentation.login.LoginScreen
+import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
 import com.bharat.app5.feature_auth.presentation.register.RegisterScreen
+import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
 import com.bharat.app5.feature_auth.presentation.start.StartScreen
 import com.bharat.app5.feature_legal.presentation.legal.LegalType
 import com.bharat.app5.feature_legal.presentation.navigation.LegalScreenRoutes
@@ -29,38 +31,27 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
         startDestination = AuthScreenRoutes.Start
     ){
 
-
-
-
-
-
         composable(
             AuthScreenRoutes.Start,
             enterTransition = null,
             exitTransition = {
                 slideOutHorizontally(
                     targetOffsetX = { -it },
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(500, easing = FastOutSlowInEasing)
                 )
             },
             popEnterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { -it },
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(500, easing = FastOutSlowInEasing)
                 )
             },
             popExitTransition = null
         ) {
             StartScreen(
-                onLoginClick = {navController.navigate(AuthScreenRoutes.Login)},
                 onRegisterClick = {navController.navigate(AuthScreenRoutes.Register)}
             )
         }
-
-
-
-
-
 
 
 
@@ -69,22 +60,22 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
             enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { it },
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(500, easing = FastOutSlowInEasing)
                     )
             },
             exitTransition = {
                 slideOutHorizontally(targetOffsetX = { it },
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(500, easing = FastOutSlowInEasing)
                 )
             },
             popExitTransition = {
                 slideOutHorizontally(targetOffsetX = { it },
-                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                    animationSpec = tween(500, easing = FastOutSlowInEasing)
                 )
             },
             popEnterTransition = null
 
-            ) {
+            ) { backStackEntry ->
             RegisterScreen(
                 onRegisterSuccess = {
                 navController.navigate(ScreenRoutes.MainScreenRoute){
@@ -101,28 +92,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                 onExternalTransmissionClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.EXTERNAL_TRANSMISSIONS}")}
         ) }
 
-
-
-
-
-
-
-
-
-
-
-        composable(
-            AuthScreenRoutes.Login,
-            enterTransition = { slideInHorizontally(initialOffsetX = { it }) + fadeIn() }
-
-            ) {
-            LoginScreen(
-            onLoginSuccess = {navController.navigate(ScreenRoutes.MainScreenRoute){
-                popUpTo(ScreenRoutes.AuthScreenRoute){
-                    inclusive = true
-                }
-            } }
-        ) }
 
     }
 }

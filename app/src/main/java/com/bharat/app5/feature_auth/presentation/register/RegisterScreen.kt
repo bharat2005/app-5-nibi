@@ -21,12 +21,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -51,11 +56,6 @@ import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.bharat.app5.feature_auth.data.repository.AuthRepositoryIml
-import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
-import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
-import com.bharat.app5.feature_auth.presentation.login.LoginScreen
 import com.bharat.app5.feature_auth.presentation.register.components.AuthStep
 import com.bharat.app5.feature_auth.presentation.register.components.DobStep
 import com.bharat.app5.feature_auth.presentation.register.components.GenderStep
@@ -70,7 +70,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_android_components_ViewModelComponent
 import kotlinx.coroutines.launch
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.bharat.app5.feature_auth.presentation.register.components.RegisterHeader
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -79,18 +83,12 @@ onRegisterSuccess : () -> Unit,
 onExit : () -> Unit,
 onTermsClick : () -> Unit,
 onPrivacyPolicyClick : () -> Unit,
-onExternalTransmissionClick : () -> Unit
+onExternalTransmissionClick : () -> Unit,
+viewModel : RegisterViewModel = hiltViewModel()
 ) {
-    val viewModel : RegisterViewModel = viewModel(
-        factory = RegisterViewModel.Factory(
-            registerUserUseCase = RegisterUserUseCase(
-                repository = AuthRepositoryIml(
-                    auth = FirebaseAuth.getInstance(),
-                    firestore = FirebaseFirestore.getInstance()
-                )
-            )
-        )
-    )
+
+
+
     val uiState by viewModel.uiState.collectAsState()
     val context = LocalContext.current
 
@@ -101,52 +99,7 @@ onExternalTransmissionClick : () -> Unit
         }
     }
 
-
-
-
-
-
-
-    val googleSignInLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ){ result ->
-        if(result.resultCode == Activity.RESULT_OK){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try{
-                val account = task.getResult(ApiException::class.java)
-                val idToken = account?.idToken
-                if(idToken != null){
-                    viewModel.onGoogleSignInSuccess(idToken)
-                } else {
-                    viewModel.onGoogleSignInError("Failed to get Google Id Token")
-                }
-
-            }catch (e : ApiException){
-                viewModel.onGoogleSignInError("Google signIn fialed with status code:${e.statusCode}")
-
-            }
-        } else {
-            viewModel.onGoogleSignInError("Google SignIn failed or cancelled!")
-
-        }
-
-    }
-
-
-    val googleSignInOptions = remember {
-        GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestEmail()
-            .requestIdToken("650451806359-uhmqi74fs2eh4ncprnpk2gokdjlcne17.apps.googleusercontent.com")
-            .build()
-    }
-
-    val googleSignInClient = remember {
-        GoogleSignIn.getClient(context, googleSignInOptions)
-    }
-
-
-
-    BackHandler {
+    fun handleBack() : Unit {
         val currentStep = uiState.currentStep
         if(currentStep == RegistrationStep.GENDER_STEP){
             onExit()
@@ -155,16 +108,17 @@ onExternalTransmissionClick : () -> Unit
         }
     }
 
-    Scaffold { paddingValues ->
+    BackHandler(onBack = {handleBack()})
 
-        Box(
-            modifier = Modifier.fillMaxSize().padding(paddingValues),
-        ) {
+
+
             Column(
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)
             ) {
-                //progress bar
-                Box(modifier = Modifier.height(80.dp).fillMaxWidth().background(Color.Black))
+
+            //Register Header
+                RegisterHeader(uiState, onExit, handleBack = { handleBack() })
+
 
                 //step content
                     AnimatedContent(
@@ -180,7 +134,7 @@ onExternalTransmissionClick : () -> Unit
                         }
                     ) { targetState ->
                         Box(
-                            modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp, vertical = 24.dp)
+                            modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp, vertical = 24.dp).windowInsetsPadding(WindowInsets.ime)
                         ) {
                         when (targetState) {
                             RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel, uiState = uiState)
@@ -195,9 +149,8 @@ onExternalTransmissionClick : () -> Unit
 
                             RegistrationStep.WEIGHT_STEP -> WeightStep(viewModel = viewModel, uiState = uiState)
 
-                            RegistrationStep.AUTH_STEP -> AuthStep(onGoogleRegisterClick = {
-                                googleSignInLauncher.launch(googleSignInClient.signInIntent)
-                            },
+                            RegistrationStep.AUTH_STEP -> AuthStep(
+                                viewModel = viewModel,
                                 onTermsClick = onTermsClick,
                                 onPrivacyPolicyClick = onPrivacyPolicyClick,
                                 onExternalTransmissionClick = onExternalTransmissionClick
@@ -231,8 +184,5 @@ onExternalTransmissionClick : () -> Unit
                     CircularProgressIndicator()
                 }
 
-            }
-
-        }
     }
 }

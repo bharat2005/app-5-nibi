@@ -4,6 +4,9 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 
     id("com.google.gms.google-services")
+
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -62,6 +65,7 @@ dependencies {
 
     //Navigation & ViewModel
     implementation("androidx.navigation:navigation-compose:2.9.5")
+    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
 
     //Firebase
@@ -74,5 +78,9 @@ dependencies {
 
     //playservice
     implementation("com.google.android.gms:play-services-auth:21.4.0")
+
+    //Hilt
+    implementation("com.google.dagger:hilt-android:2.57.1")
+    ksp("com.google.dagger:hilt-android-compiler:2.57.1")
 
 }

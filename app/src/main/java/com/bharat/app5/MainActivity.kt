@@ -1,9 +1,11 @@
 package com.bharat.app5
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,8 +26,11 @@ import com.bharat.app5.feature_auth.presentation.navigation.authNavGraph
 import com.bharat.app5.feature_legal.presentation.navigation.legalNavGraph
 import com.bharat.app5.feature_main.presentation.navigation.mainNavGraph
 import com.bharat.app5.ui.theme.App5Theme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

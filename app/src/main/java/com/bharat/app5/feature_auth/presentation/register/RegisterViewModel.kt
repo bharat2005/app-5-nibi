@@ -17,6 +17,7 @@ import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.google.android.gms.auth.GoogleAuthException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,6 +26,8 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import javax.inject.Inject
+import javax.inject.Provider
 
 
 enum class RegistrationStep {
@@ -48,9 +51,11 @@ data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
 )
 
 
-class RegisterViewModel(
-    private val registerUserUseCase : RegisterUserUseCase
+@HiltViewModel
+class RegisterViewModel @Inject constructor(
+    private val registerUserUseCaseProvider : Provider<RegisterUserUseCase>
 ) : ViewModel() {
+    private val registerUserUseCase by lazy { registerUserUseCaseProvider.get() }
 
     //UiState
     @RequiresApi(Build.VERSION_CODES.O)
@@ -177,19 +182,8 @@ class RegisterViewModel(
 
     }
 
-    class Factory(
-        private val registerUserUseCase: RegisterUserUseCase
-    ) : ViewModelProvider.Factory {
 
-        override fun <T : ViewModel> create(modelClass : Class<T>) : T {
-            if(modelClass.isAssignableFrom(RegisterViewModel::class.java)){
-                return RegisterViewModel(registerUserUseCase) as T
-            }
-            throw IllegalArgumentException("Unknown ViewModel class")
 
-        }
-
-    }
 
 
 }

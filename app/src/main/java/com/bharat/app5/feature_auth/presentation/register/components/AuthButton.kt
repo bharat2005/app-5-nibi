@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.bharat.app5.R
@@ -31,14 +32,15 @@ fun AuthButton(
     @DrawableRes iconRes : Int,
     text : String,
     contentColor : Color = Color.Black,
-    onClick : () -> Unit
+    onClick : () -> Unit,
+    shape : Shape
 
 ) {
     Box(
         modifier = modifier
             .height(50.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .border(1.dp, borderColor, RoundedCornerShape(8.dp))
+            .clip(shape)
+            .border(1.dp, borderColor, shape)
             .clickable(onClick = onClick)
             .background(backgroundColor)
             .padding(horizontal = 18.dp),
