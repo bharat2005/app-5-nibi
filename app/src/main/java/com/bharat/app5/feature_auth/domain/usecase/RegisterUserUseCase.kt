@@ -7,8 +7,9 @@ import com.google.firebase.auth.AuthCredential
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
+import javax.inject.Inject
 
-class RegisterUserUseCase(
+class RegisterUserUseCase @Inject constructor(
     private val repository : AuthRepository
 ) {
     suspend operator fun invoke(

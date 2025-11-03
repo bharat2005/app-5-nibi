@@ -1,5 +1,6 @@
 package com.bharat.app5.feature_auth.presentation.navigation
 
+import android.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.FastOutLinearInEasing
@@ -8,6 +9,9 @@ import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -64,16 +68,22 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                     )
             },
             exitTransition = {
-                slideOutHorizontally(targetOffsetX = { it },
-                    animationSpec = tween(500, easing = FastOutSlowInEasing)
-                )
+                scaleOut(
+                    targetScale = 1.1f,
+                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                ) + fadeOut( tween(300, easing = FastOutSlowInEasing))
             },
             popExitTransition = {
                 slideOutHorizontally(targetOffsetX = { it },
                     animationSpec = tween(500, easing = FastOutSlowInEasing)
                 )
             },
-            popEnterTransition = null
+            popEnterTransition = {
+                scaleIn(
+                    initialScale = 1.1f,
+                    animationSpec = tween(300, easing = FastOutSlowInEasing)
+                ) + fadeIn(tween(300, easing = FastOutSlowInEasing))
+            }
 
             ) { backStackEntry ->
             RegisterScreen(

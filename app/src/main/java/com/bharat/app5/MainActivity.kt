@@ -48,12 +48,7 @@ class MainActivity : ComponentActivity() {
                         authNavGraph(navController)
                         legalNavGraph(navController)
                         mainNavGraph(navController)
-
                     }
-
-
-
-
 
                 }
 
