@@ -132,7 +132,7 @@ viewModel : StartViewModel = hiltViewModel()
             //Error Dialog
         if(uiState.registrationError != null){
             AlertDialog(
-                title = {Text("Notice")},
+                title = {Text("Error")},
                 text = {Text(uiState.registrationError!!)},
                 onDismissRequest = {viewModel.onLocalGoogleSignInErrorDismiss()},
                 confirmButton = {

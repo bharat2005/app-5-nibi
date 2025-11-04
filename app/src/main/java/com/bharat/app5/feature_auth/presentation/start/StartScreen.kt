@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -25,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.bharat.app5.feature_auth.presentation.register.components.AuthButton
 import com.bharat.app5.R
@@ -112,10 +114,18 @@ fun StartScreen(
                             viewModel.onLocalGoogleSignInErrorDismiss()
                         },
                     ) {
-                        Text("Ok")
+                        Text("OK")
                     }
                 }
             )
+        }
+
+        if(uiState.isLoggingIn){
+            Dialog(
+                onDismissRequest = {}
+            ) {
+                CircularProgressIndicator()
+            }
         }
 
 
