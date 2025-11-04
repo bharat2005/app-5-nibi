@@ -1,58 +1,32 @@
 package com.bharat.app5.feature_auth.presentation.register
 
-import android.app.Activity
-
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOut
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.union
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.ModifierLocalReadScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -63,15 +37,6 @@ import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
 import com.bharat.app5.feature_auth.presentation.register.components.HeightStep
 import com.bharat.app5.feature_auth.presentation.register.components.NameStep
 import com.bharat.app5.feature_auth.presentation.register.components.WeightStep
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.firestore.bundle.BundleReader
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_android_components_ViewModelComponent
-import kotlinx.coroutines.launch
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bharat.app5.feature_auth.presentation.register.components.RegisterHeader
 
@@ -84,7 +49,7 @@ onExit : () -> Unit,
 onTermsClick : () -> Unit,
 onPrivacyPolicyClick : () -> Unit,
 onExternalTransmissionClick : () -> Unit,
-viewModel : RegisterViewModel = hiltViewModel()
+viewModel : StartViewModel = hiltViewModel()
 ) {
 
 
@@ -137,6 +102,7 @@ viewModel : RegisterViewModel = hiltViewModel()
                             modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp, vertical = 24.dp).windowInsetsPadding(WindowInsets.ime)
                         ) {
                         when (targetState) {
+
                             RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel, uiState = uiState)
 
                             RegistrationStep.GOAL_STEP -> GoalStep(viewModel = viewModel,  uiState = uiState)
@@ -168,10 +134,10 @@ viewModel : RegisterViewModel = hiltViewModel()
             AlertDialog(
                 title = {Text("Notice")},
                 text = {Text(uiState.registrationError!!)},
-                onDismissRequest = {viewModel.onRegistrationErrorDismiss()},
+                onDismissRequest = {viewModel.onLocalGoogleSignInErrorDismiss()},
                 confirmButton = {
                     TextButton(
-                        onClick = {viewModel.onRegistrationErrorDismiss()},
+                        onClick = {viewModel.onLocalGoogleSignInErrorDismiss()},
                     ) { Text("OK")}
                 }
             )

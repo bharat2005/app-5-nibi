@@ -1,6 +1,5 @@
 package com.bharat.app5.feature_auth.presentation.register.components
 
-import android.R
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
@@ -21,23 +20,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.TextToolbar
 import androidx.compose.ui.unit.dp
 import com.bharat.app5.feature_auth.domain.model.Goal
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
 import com.bharat.app5.feature_auth.presentation.register.RegisterUiState
-import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
+import com.bharat.app5.feature_auth.presentation.register.StartViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun GoalStep(modifier: Modifier = Modifier, viewModel: RegisterViewModel, uiState : RegisterUiState) {
+fun GoalStep(modifier: Modifier = Modifier, viewModel: StartViewModel   , uiState : RegisterUiState) {
     val unSupportedGoal by viewModel.unSupportedGoal.collectAsState()
 
      Box(

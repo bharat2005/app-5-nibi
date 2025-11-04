@@ -14,18 +14,17 @@ class RegisterUserUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         credential: AuthCredential,
-        userDetails: UserDetails
+        userDetails : UserDetails
     ): Flow<Result<Unit>> {
-        return repository.firebaseSignInWithGoogle(credential).flatMapConcat { result ->
+        return repository.registerWithGoogle(credential).flatMapConcat { result ->
             result.fold(
                 onSuccess = { uid ->
                     repository.saveUsersDetails(uid, userDetails)
                 },
-                onFailure = { e ->
-                    flowOf(Result.failure(e))
+                onFailure = {
+                    flowOf(Result.failure(it))
                 }
             )
-
         }
     }
 }

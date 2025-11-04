@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -17,19 +18,6 @@ class AuthRepositoryIml @Inject constructor(
    private val auth : FirebaseAuth,
    private val firestore : FirebaseFirestore
 ) : AuthRepository {
-   override suspend fun firebaseSignInWithGoogle(credential: AuthCredential) : Flow<Result<String>> = flow{
-      val result = auth.signInWithCredential(credential).await()
-      val uid = result.user?.uid
-      if(uid != null){
-         emit(Result.success(uid))
-      } else {
-         emit(Result.failure(Exception("Uid is null")))
-      }
-   }.catch {
-      emit(Result.failure(Exception(it)))
-   }
-
-
 
    override suspend fun saveUsersDetails(
       uid: String,
@@ -48,4 +36,34 @@ class AuthRepositoryIml @Inject constructor(
    } .catch {
       emit(Result.failure(Exception(it)))
    }
+
+   override suspend fun registerWithGoogle(credential: AuthCredential) : Flow<Result<String>> = flow{
+      val result = auth.signInWithCredential(credential).await()
+      val uid = result.user?.uid ?: throw Exception("Uid is null")
+      val userDoc = firestore.collection("users").document(uid).get().await()
+
+      if(userDoc.exists()){
+         throw Exception("User already exists")
+      } else {
+        emit(Result.success(uid))
+      }
+   }.catch {
+      emit(Result.failure(Exception(it)))
+   }
+
+
+   override suspend fun signInWithGoogle(credential: AuthCredential) : Flow<Result<Unit>> = flow{
+      val result = auth.signInWithCredential(credential).await()
+      val uid = result.user?.uid ?: throw Exception("Uid is null")
+      val userDoc = firestore.collection("users").document(uid).get().await()
+
+      if(userDoc.exists()){
+         emit(Result.success(Unit))
+      } else {
+         throw Exception("User does not exist")
+      }
+   }.catch {
+      emit(Result.failure(Exception(it)))
+   }
+
 }

@@ -1,12 +1,8 @@
 package com.bharat.app5.feature_auth.presentation.navigation
 
-import android.R
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -14,15 +10,12 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.bharat.app5.core.navigation.ScreenRoutes
-import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
 import com.bharat.app5.feature_auth.presentation.register.RegisterScreen
-import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
 import com.bharat.app5.feature_auth.presentation.start.StartScreen
 import com.bharat.app5.feature_legal.presentation.legal.LegalType
 import com.bharat.app5.feature_legal.presentation.navigation.LegalScreenRoutes
@@ -35,8 +28,11 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
         startDestination = AuthScreenRoutes.Start
     ){
 
+
+
+        //Start Screen
         composable(
-            AuthScreenRoutes.Start,
+            route = AuthScreenRoutes.Start,
             enterTransition = null,
             exitTransition = {
                 slideOutHorizontally(
@@ -51,11 +47,18 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                 )
             },
             popExitTransition = null
-        ) {
+
+        ){
             StartScreen(
                 onRegisterClick = {navController.navigate(AuthScreenRoutes.Register)}
             )
         }
+
+
+
+
+
+
 
 
 
@@ -65,7 +68,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                 slideInHorizontally(
                     initialOffsetX = { it },
                     animationSpec = tween(500, easing = FastOutSlowInEasing)
-                    )
+                )
             },
             exitTransition = {
                 scaleOut(
@@ -74,7 +77,8 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                 ) + fadeOut( tween(300, easing = FastOutSlowInEasing))
             },
             popExitTransition = {
-                slideOutHorizontally(targetOffsetX = { it },
+                slideOutHorizontally(
+                    targetOffsetX = { it },
                     animationSpec = tween(500, easing = FastOutSlowInEasing)
                 )
             },
@@ -84,7 +88,6 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                     animationSpec = tween(300, easing = FastOutSlowInEasing)
                 ) + fadeIn(tween(300, easing = FastOutSlowInEasing))
             }
-
             ) { backStackEntry ->
             RegisterScreen(
                 onRegisterSuccess = {
@@ -100,7 +103,8 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
                 onTermsClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.TERMS_CONDITIONS}")},
                 onPrivacyPolicyClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.PRIVACY_POLICY}")},
                 onExternalTransmissionClick = {navController.navigate("${LegalScreenRoutes.LegalScreen}/${LegalType.EXTERNAL_TRANSMISSIONS}")}
-        ) }
+        )
+        }
 
 
     }

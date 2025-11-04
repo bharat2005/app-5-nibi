@@ -1,8 +1,6 @@
 package com.bharat.app5.feature_auth.presentation.register.components
 
 import android.os.Build
-import android.service.autofill.TextValueSanitizer
-import android.view.textclassifier.TextSelection
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
@@ -11,21 +9,14 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.ime
-import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,14 +40,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 
 import com.bharat.app5.feature_auth.presentation.components.RegistrationStepHolder
 import com.bharat.app5.feature_auth.presentation.register.RegisterUiState
-import com.bharat.app5.feature_auth.presentation.register.RegisterViewModel
-import com.bharat.app5.feature_auth.presentation.register.RegistrationStep
+import com.bharat.app5.feature_auth.presentation.register.StartViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HeightStep(
     modifier: Modifier = Modifier,
-    viewModel: RegisterViewModel,
+    viewModel: StartViewModel,
     uiState : RegisterUiState
 ) {
     val focusRequester = remember { FocusRequester() }

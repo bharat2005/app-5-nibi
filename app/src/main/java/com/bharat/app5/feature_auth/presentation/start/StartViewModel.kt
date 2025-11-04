@@ -1,0 +1,31 @@
+package com.bharat.app5.feature_auth.presentation.start
+
+import androidx.lifecycle.ViewModel
+import com.bharat.app5.feature_auth.domain.usecase.LoginUserUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import javax.inject.Inject
+import javax.inject.Provider
+
+data class LoginUiState(
+    val isLoggingIn : Boolean = false,
+    val loginError : String? = null,
+    val loginSuccess : Boolean = false
+)
+
+@HiltViewModel
+class StartViewModel @Inject constructor(
+    private val loginUserUseCaseProvider : Provider<LoginUserUseCase>,
+) : ViewModel() {
+    private val loginUserUseCase by lazy { loginUserUseCaseProvider.get() }
+
+    private val _uiState = MutableStateFlow(LoginUiState())
+    val uiState = _uiState.asStateFlow()
+
+
+
+
+
+
+}

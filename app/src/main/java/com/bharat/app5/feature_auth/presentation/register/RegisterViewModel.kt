@@ -1,27 +1,18 @@
 package com.bharat.app5.feature_auth.presentation.register
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.browser.trusted.Token
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bharat.app5.feature_auth.domain.model.Gender
 import com.bharat.app5.feature_auth.domain.model.Goal
 import com.bharat.app5.feature_auth.domain.model.UserDetails
 import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
-import com.bharat.app5.feature_auth.presentation.register.components.GoalStep
-import com.google.android.gms.auth.GoogleAuthException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,18 +33,22 @@ enum class RegistrationStep {
 }
 
 
+
+
 data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
     val isRegistering : Boolean = false,
     val registrationError : String? = null,
     val registrationSuccess : Boolean = false,
     val userDetails : UserDetails = UserDetails(),
-    val currentStep : RegistrationStep = RegistrationStep.GOAL_STEP
+    val currentStep : RegistrationStep = RegistrationStep.GENDER_STEP
 )
 
 
+
+
 @HiltViewModel
-class RegisterViewModel @Inject constructor(
-    private val registerUserUseCaseProvider : Provider<RegisterUserUseCase>
+class StartViewModel @Inject constructor(
+    private val registerUserUseCaseProvider : Provider<RegisterUserUseCase>,
 ) : ViewModel() {
     private val registerUserUseCase by lazy { registerUserUseCaseProvider.get() }
 
@@ -111,22 +106,34 @@ class RegisterViewModel @Inject constructor(
         _uiState.update { it.copy(userDetails = it.userDetails.copy(weight = weight)) }
     }
 
+
+
+
+
+
+
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onGoogleSignInError(error : String){
+    fun onLocalGoogleSignInError(error : String){
         _uiState.update { it.copy(isRegistering = false, registrationError = error, registrationSuccess = false) }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onRegistrationErrorDismiss(){
+    fun onLocalGoogleSignInErrorDismiss(){
         _uiState.update { it.copy(isRegistering = false, registrationError = null, registrationSuccess = false) }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun onGoogleSignInSuccess(idToken : String){
+    fun onLocalGoogleSignInSuccess(idToken : String){
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         submitRegistration(credential)
 
     }
+
+
+
+
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun submitRegistration(credential: AuthCredential){
@@ -148,6 +155,8 @@ class RegisterViewModel @Inject constructor(
 
         }
     }
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun goToNextStep(){
         val nextStep = when(_uiState.value.currentStep){
@@ -163,7 +172,6 @@ class RegisterViewModel @Inject constructor(
             _uiState.update{ it.copy(currentStep = nextStep)}
         }
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun goToPreviousStep(){
