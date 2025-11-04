@@ -39,5 +39,12 @@ class StartViewModel @Inject constructor(
     }
 
 
+    fun onLocalGoogleSignInErrorDismiss(){
+        _uiState.update {
+            it.copy(isLoggingIn = false, loginError = null, loginSuccess = false)
+        }
+    }
+
+
 
 }
