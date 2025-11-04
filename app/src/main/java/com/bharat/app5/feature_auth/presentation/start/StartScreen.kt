@@ -1,6 +1,7 @@
 package com.bharat.app5.feature_auth.presentation.start
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -73,6 +75,15 @@ fun StartScreen(
         }
 
     }
+
+
+    LaunchedEffect(uiState.loginSuccess) {
+        if(uiState.loginSuccess){
+            Toast.makeText(context, "Login SuccessFFull!!", Toast.LENGTH_LONG).show()
+        }
+    }
+
+
 
     Scaffold { paddingValues ->
         Column(
