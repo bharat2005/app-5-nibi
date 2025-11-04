@@ -127,7 +127,9 @@ fun AuthStep(
                 shape = RoundedCornerShape(8.dp ),
                 onClick = {
                     if(isChecked){
+                        googleSignInClient.signOut().addOnCompleteListener {
                             googleSignInLauncher.launch(googleSignInClient.signInIntent)
+                        }
                     } else {
                         showError = true
                     }

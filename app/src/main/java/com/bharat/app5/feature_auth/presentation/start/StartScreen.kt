@@ -101,7 +101,9 @@ fun StartScreen(
             AuthButton(
                 text = "Login with Google",
                 onClick = {
-                    googleSingInLauncher.launch(googleSignInClient.signInIntent)
+                    googleSignInClient.signOut().addOnCompleteListener {
+                        googleSingInLauncher.launch(googleSignInClient.signInIntent)
+                    }
                 },
                 shape = RoundedCornerShape(24.dp),
                 contentColor = Color.Black,

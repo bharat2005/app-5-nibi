@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.bharat.app5.core.navigation.ScreenRoutes
+import com.bharat.app5.app_root.AppRoutes
 import com.bharat.app5.feature_auth.presentation.register.RegisterScreen
 import com.bharat.app5.feature_auth.presentation.start.StartScreen
 import com.bharat.app5.feature_legal.presentation.legal.LegalType
@@ -24,7 +24,7 @@ import com.bharat.app5.feature_legal.presentation.navigation.LegalScreenRoutes
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authNavGraph(navController: NavController){
     navigation(
-        route = ScreenRoutes.AuthScreenRoute,
+        route = AppRoutes.AuthRoot,
         startDestination = AuthScreenRoutes.Start
     ){
 
@@ -91,8 +91,8 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
             ) { backStackEntry ->
             RegisterScreen(
                 onRegisterSuccess = {
-                navController.navigate(ScreenRoutes.MainScreenRoute){
-                    popUpTo(ScreenRoutes.AuthScreenRoute){
+                navController.navigate(AppRoutes.MainRoute){
+                    popUpTo(AppRoutes.AuthRoot){
                         inclusive = true
                     }
                 }
