@@ -4,7 +4,9 @@ import android.app.Activity
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -134,8 +136,9 @@ fun StartScreen(
         }
 
         if(uiState.isLoggingIn){
-            Dialog(
-                onDismissRequest = {}
+            Box(
+                modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f)),
+                contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
             }

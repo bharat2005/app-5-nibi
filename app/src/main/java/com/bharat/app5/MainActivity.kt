@@ -16,15 +16,21 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val viewModel : AppRootViewModel by viewModels()
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition {
+            viewModel.isLoading.value
+        }
 
         super.onCreate(savedInstanceState)
 
         enableEdgeToEdge()
         setContent {
             App5Theme {
-                AppRoot()
+                AppRoot(viewModel = viewModel)
             }
         }
     }

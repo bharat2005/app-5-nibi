@@ -2,6 +2,7 @@ package com.bharat.app5.app_root
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.awaitClose
@@ -28,6 +29,9 @@ class AppRootViewModel @Inject constructor(
     private val firebaseAuth : FirebaseAuth
 ): ViewModel(){
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading = _isLoading.asStateFlow()
+
     val authState : StateFlow<AuthState> = callbackFlow {
         val listener = FirebaseAuth.AuthStateListener{ auth ->
             trySend(auth.currentUser)
@@ -45,6 +49,13 @@ class AppRootViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000L),
         initialValue = AuthState.UNKNOWN
     )
+
+    init{
+        viewModelScope.launch {
+            authState.first{it != AuthState.UNKNOWN}
+            _isLoading.value = false
+        }
+    }
 
 
 }

@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -26,7 +27,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -126,29 +129,41 @@ viewModel : StartViewModel = hiltViewModel()
                     }
                 }
 
+
+
+
+
+
+
+                //Error Dialog
+                if(uiState.registrationError != null){
+                    AlertDialog(
+                        title = {Text("Error")},
+                        text = {Text(uiState.registrationError!!)},
+                        onDismissRequest = {viewModel.onLocalGoogleSignInErrorDismiss()},
+                        confirmButton = {
+                            TextButton(
+                                onClick = {viewModel.onLocalGoogleSignInErrorDismiss()},
+                            ) { Text("OK")}
+                        }
+                    )
+                }
+
+                if(uiState.isRegistering){
+                    Box(
+                        modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator()
+                    }
+
+                }
+
+
+
+
+
             }
 
 
-            //Error Dialog
-        if(uiState.registrationError != null){
-            AlertDialog(
-                title = {Text("Error")},
-                text = {Text(uiState.registrationError!!)},
-                onDismissRequest = {viewModel.onLocalGoogleSignInErrorDismiss()},
-                confirmButton = {
-                    TextButton(
-                        onClick = {viewModel.onLocalGoogleSignInErrorDismiss()},
-                    ) { Text("OK")}
-                }
-            )
-        }
-
-            if(uiState.isRegistering){
-                Dialog (
-                    onDismissRequest = {}
-                ){
-                    CircularProgressIndicator()
-                }
-
-    }
 }
