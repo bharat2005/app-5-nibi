@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.unit.dp
@@ -135,9 +136,10 @@ fun StartScreen(
             )
         }
 
-        if(true){
+        if(uiState.isLoggingIn){
             Box(
-                modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f)),
+                modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f))
+                    .pointerInput(Unit){},
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()

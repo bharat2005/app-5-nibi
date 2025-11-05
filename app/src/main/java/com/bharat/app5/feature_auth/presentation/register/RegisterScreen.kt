@@ -30,6 +30,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -146,7 +147,7 @@ viewModel : StartViewModel = hiltViewModel()
 
                 if(uiState.isRegistering){
                     Box(
-                        modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f)),
+                        modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f)).pointerInput(Unit){},
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator()
