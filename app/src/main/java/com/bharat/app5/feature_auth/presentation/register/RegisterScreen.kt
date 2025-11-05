@@ -130,11 +130,6 @@ viewModel : StartViewModel = hiltViewModel()
                 }
 
 
-
-
-
-
-
                 //Error Dialog
                 if(uiState.registrationError != null){
                     AlertDialog(

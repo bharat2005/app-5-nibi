@@ -135,7 +135,7 @@ fun StartScreen(
             )
         }
 
-        if(uiState.isLoggingIn){
+        if(true){
             Box(
                 modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f)),
                 contentAlignment = Alignment.Center

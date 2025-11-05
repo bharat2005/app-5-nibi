@@ -2,6 +2,7 @@ package com.bharat.app5.app_root
 
 import android.app.Activity
 import android.os.Build
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,10 +42,10 @@ fun AppRoot(
         AuthState.AUTHENTICATED -> AppRoutes.MainRoute
     }
 
-    val window = (LocalView.current.context as Activity).window
+    val window = (LocalActivity.current as Activity).window
 
     SideEffect {
-        window.navigationBarColor = Color.Black.toArgb()
+        window.navigationBarColor = Color.Red.toArgb()
     }
 
 
