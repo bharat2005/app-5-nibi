@@ -43,6 +43,7 @@ class AuthRepositoryIml @Inject constructor(
       val userDoc = firestore.collection("users").document(uid).get().await()
 
       if(userDoc.exists()){
+         auth.signOut()
          throw Exception("User already exists")
       } else {
         emit(Result.success(uid))
@@ -60,6 +61,7 @@ class AuthRepositoryIml @Inject constructor(
       if(userDoc.exists()){
          emit(Result.success(Unit))
       } else {
+         auth.signOut()
          throw Exception("User does not exist")
       }
    }.catch {

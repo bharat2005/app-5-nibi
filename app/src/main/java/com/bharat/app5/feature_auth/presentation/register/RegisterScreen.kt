@@ -48,14 +48,13 @@ import com.bharat.app5.feature_auth.presentation.register.components.RegisterHea
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RegisterScreen(
-onRegisterSuccess : () -> Unit,
-onExit : () -> Unit,
-onTermsClick : () -> Unit,
-onPrivacyPolicyClick : () -> Unit,
-onExternalTransmissionClick : () -> Unit,
-viewModel : StartViewModel = hiltViewModel()
+    onRegisterSuccess: () -> Unit,
+    onExit: () -> Unit,
+    onTermsClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
+    onExternalTransmissionClick: () -> Unit,
+    viewModel: StartViewModel = hiltViewModel()
 ) {
-
 
 
     val uiState by viewModel.uiState.collectAsState()
@@ -63,103 +62,134 @@ viewModel : StartViewModel = hiltViewModel()
 
 
     LaunchedEffect(uiState.registrationSuccess) {
-        if(uiState.registrationSuccess){
+        if (uiState.registrationSuccess) {
             Toast.makeText(context, "Registraion SuccessFFull!!", Toast.LENGTH_LONG).show()
         }
     }
 
-    fun handleBack() : Unit {
+    fun handleBack(): Unit {
         val currentStep = uiState.currentStep
-        if(currentStep == RegistrationStep.GENDER_STEP){
+        if (currentStep == RegistrationStep.GENDER_STEP) {
             onExit()
         } else {
             viewModel.goToPreviousStep()
         }
     }
 
-    BackHandler(onBack = {handleBack()})
+    BackHandler(onBack = { handleBack() })
 
 
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
 
-            Column(
-                modifier = Modifier.fillMaxSize().windowInsetsPadding(WindowInsets.systemBars)
-            ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.systemBars)
+        ) {
 
             //Register Header
-                RegisterHeader(uiState, onExit, handleBack = { handleBack() })
+            RegisterHeader(uiState, onExit, handleBack = { handleBack() })
 
 
-                //step content
-                    AnimatedContent(
-                        targetState = uiState.currentStep,
-                        transitionSpec = {
-                            if (targetState.ordinal > initialState.ordinal) {
-                                slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
-                                        slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
-                            } else {
-                                slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
-                                        slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
-                            }
-                        }
-                    ) { targetState ->
-                        Box(
-                            modifier = Modifier.fillMaxSize().padding(horizontal = 38.dp, vertical = 24.dp).windowInsetsPadding(WindowInsets.ime)
-                        ) {
-                        when (targetState) {
-
-                            RegistrationStep.GENDER_STEP -> GenderStep(viewModel = viewModel, uiState = uiState)
-
-                            RegistrationStep.GOAL_STEP -> GoalStep(viewModel = viewModel,  uiState = uiState)
-
-                            RegistrationStep.NAME_STEP -> NameStep(viewModel = viewModel, uiState = uiState)
-
-                            RegistrationStep.DOB_STEP -> DobStep(viewModel = viewModel, uiState = uiState)
-
-                            RegistrationStep.HEIGHT_STEP -> HeightStep(viewModel = viewModel, uiState = uiState)
-
-                            RegistrationStep.WEIGHT_STEP -> WeightStep(viewModel = viewModel, uiState = uiState)
-
-                            RegistrationStep.AUTH_STEP -> AuthStep(
-                                viewModel = viewModel,
-                                onTermsClick = onTermsClick,
-                                onPrivacyPolicyClick = onPrivacyPolicyClick,
-                                onExternalTransmissionClick = onExternalTransmissionClick
-                            )
-
-                        }
+            //step content
+            AnimatedContent(
+                targetState = uiState.currentStep,
+                transitionSpec = {
+                    if (targetState.ordinal > initialState.ordinal) {
+                        slideInHorizontally(initialOffsetX = { it }) + fadeIn() togetherWith
+                                slideOutHorizontally(targetOffsetX = { -it }) + fadeOut()
+                    } else {
+                        slideInHorizontally(initialOffsetX = { -it }) + fadeIn() togetherWith
+                                slideOutHorizontally(targetOffsetX = { it }) + fadeOut()
                     }
                 }
+            ) { targetState ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 38.dp, vertical = 24.dp)
+                        .windowInsetsPadding(WindowInsets.ime)
+                ) {
+                    when (targetState) {
 
+                        RegistrationStep.GENDER_STEP -> GenderStep(
+                            viewModel = viewModel,
+                            uiState = uiState
+                        )
 
-                //Error Dialog
-                if(uiState.registrationError != null){
-                    AlertDialog(
-                        title = {Text("Error")},
-                        text = {Text(uiState.registrationError!!)},
-                        onDismissRequest = {viewModel.onLocalGoogleSignInErrorDismiss()},
-                        confirmButton = {
-                            TextButton(
-                                onClick = {viewModel.onLocalGoogleSignInErrorDismiss()},
-                            ) { Text("OK")}
-                        }
-                    )
-                }
+                        RegistrationStep.GOAL_STEP -> GoalStep(
+                            viewModel = viewModel,
+                            uiState = uiState
+                        )
 
-                if(uiState.isRegistering){
-                    Box(
-                        modifier = Modifier.fillMaxSize().background(Color.White.copy(alpha = 0.5f)).pointerInput(Unit){},
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator()
+                        RegistrationStep.NAME_STEP -> NameStep(
+                            viewModel = viewModel,
+                            uiState = uiState
+                        )
+
+                        RegistrationStep.DOB_STEP -> DobStep(
+                            viewModel = viewModel,
+                            uiState = uiState
+                        )
+
+                        RegistrationStep.HEIGHT_STEP -> HeightStep(
+                            viewModel = viewModel,
+                            uiState = uiState
+                        )
+
+                        RegistrationStep.WEIGHT_STEP -> WeightStep(
+                            viewModel = viewModel,
+                            uiState = uiState
+                        )
+
+                        RegistrationStep.AUTH_STEP -> AuthStep(
+                            viewModel = viewModel,
+                            onTermsClick = onTermsClick,
+                            onPrivacyPolicyClick = onPrivacyPolicyClick,
+                            onExternalTransmissionClick = onExternalTransmissionClick
+                        )
+
                     }
-
                 }
-
-
-
-
-
             }
+
+
+            //Error Dialog
+            if (uiState.registrationError != null) {
+                AlertDialog(
+                    title = { Text("Error") },
+                    text = { Text(uiState.registrationError!!) },
+                    onDismissRequest = { viewModel.onLocalGoogleSignInErrorDismiss() },
+                    confirmButton = {
+                        TextButton(
+                            onClick = { viewModel.onLocalGoogleSignInErrorDismiss() },
+                        ) { Text("OK") }
+                    }
+                )
+            }
+
+
+        }
+
+
+
+        if (uiState.isRegistering) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White.copy(alpha = 0.5f))
+                    .pointerInput(Unit) {},
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+
+        }
+
+
+    }
 
 
 }
