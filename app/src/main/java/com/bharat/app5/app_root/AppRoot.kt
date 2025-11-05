@@ -45,7 +45,7 @@ fun AppRoot(
     val window = (LocalActivity.current as Activity).window
 
     SideEffect {
-        window.navigationBarColor = Color.Red.toArgb()
+        window.navigationBarColor = Color.Black.toArgb()
     }
 
 
