@@ -24,7 +24,7 @@ import com.bharat.app5.feature_legal.presentation.navigation.LegalScreenRoutes
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authNavGraph(navController: NavController){
     navigation(
-        route = AppRoutes.AuthRoot,
+        route = AppRoutes.AuthRoute,
         startDestination = AuthScreenRoutes.Start
     ){
 
@@ -92,7 +92,7 @@ fun NavGraphBuilder.authNavGraph(navController: NavController){
             RegisterScreen(
                 onRegisterSuccess = {
                 navController.navigate(AppRoutes.MainRoute){
-                    popUpTo(AppRoutes.AuthRoot){
+                    popUpTo(AppRoutes.AuthRoute){
                         inclusive = true
                     }
                 }
