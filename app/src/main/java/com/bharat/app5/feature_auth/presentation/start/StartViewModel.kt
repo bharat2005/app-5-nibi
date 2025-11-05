@@ -67,13 +67,13 @@ class StartViewModel @Inject constructor(
                             _uiState.update {
                                 it.copy(isLoggingIn = false, loginError = null, loginSuccess = true)
                             }
-                            authOperationState.setIsOperationInProgress(true)
+                            authOperationState.setIsOperationInProgress(false)
                         },
                         onFailure = { e ->
                             _uiState.update {
                                 it.copy(isLoggingIn = false, loginError = e.localizedMessage, loginSuccess = false)
                             }
-                            authOperationState.setIsOperationInProgress(true)
+                            authOperationState.setIsOperationInProgress(false)
 
                         }
                     )
