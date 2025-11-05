@@ -83,4 +83,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.57.1")
     ksp("com.google.dagger:hilt-android-compiler:2.57.1")
 
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 }
