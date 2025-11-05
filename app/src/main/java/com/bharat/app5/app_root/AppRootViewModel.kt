@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.snapshots
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,8 +12,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -28,26 +32,36 @@ enum class AuthState {
 @HiltViewModel
 class AppRootViewModel @Inject constructor(
     private val firebaseAuth : FirebaseAuth,
-    private val firebaseFirestore: FirebaseFirestore
+    private val firebaseFirestore: FirebaseFirestore,
+    private val authOperationState: AuthOperationState
 ): ViewModel(){
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading = _isLoading.asStateFlow()
 
-    val authState : StateFlow<AuthState> = callbackFlow {
-        val listener = FirebaseAuth.AuthStateListener{ auth ->
+    val firebaseFlow = callbackFlow {
+        val  listner = FirebaseAuth.AuthStateListener { auth ->
             trySend(auth.currentUser)
         }
-        firebaseAuth.addAuthStateListener(listener)
+        firebaseAuth.addAuthStateListener(listner)
         awaitClose {
-            firebaseAuth.removeAuthStateListener(listener)
+            firebaseAuth.removeAuthStateListener(listner)
         }
-    }.flatMapConcat {  firebaseUser ->
+    }
+
+    val authState : StateFlow<AuthState> = combine(
+        firebaseFlow,
+        authOperationState.isOperationInProgress
+    ){ firebaseUser, isOperationInProgress ->
+        Pair(firebaseUser, isOperationInProgress)
+    }.filter { (_, isOperationInProgress) ->
+        !authOperationState.isOperationInProgress.value
+    }.flatMapLatest {  (firebaseUser, _) ->
         if(firebaseUser != null){
-           val userDoc = firebaseFirestore.collection("users").document(firebaseUser.uid).get().await()
+          val userDoc = firebaseFirestore.collection("users").document(firebaseUser.uid).get().await()
             if(userDoc.exists()){
                 flowOf(firebaseUser)
-            } else {
+            } else{
                 flowOf(null)
             }
         } else {

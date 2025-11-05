@@ -3,6 +3,7 @@ package com.bharat.app5.feature_auth.presentation.start
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bharat.app5.app_root.AuthOperationState
 import com.bharat.app5.feature_auth.domain.usecase.LoginUserUseCase
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
@@ -24,6 +25,7 @@ data class LoginUiState(
 @HiltViewModel
 class StartViewModel @Inject constructor(
     private val loginUserUseCaseProvider : Provider<LoginUserUseCase>,
+    private val authOperationState: AuthOperationState
 ) : ViewModel() {
     private val loginUserUseCase by lazy { loginUserUseCaseProvider.get() }
 
@@ -52,6 +54,7 @@ class StartViewModel @Inject constructor(
 
     private fun submitLogin(credential : AuthCredential){
         viewModelScope.launch {
+            authOperationState.setIsOperationInProgress(true)
             loginUserUseCase(credential)
                 .onStart {
                     _uiState.update {
@@ -64,11 +67,13 @@ class StartViewModel @Inject constructor(
                             _uiState.update {
                                 it.copy(isLoggingIn = false, loginError = null, loginSuccess = true)
                             }
+                            authOperationState.setIsOperationInProgress(true)
                         },
                         onFailure = { e ->
                             _uiState.update {
                                 it.copy(isLoggingIn = false, loginError = e.localizedMessage, loginSuccess = false)
                             }
+                            authOperationState.setIsOperationInProgress(true)
 
                         }
                     )

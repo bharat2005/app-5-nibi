@@ -4,11 +4,13 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bharat.app5.app_root.AuthOperationState
 import com.bharat.app5.feature_auth.domain.model.Gender
 import com.bharat.app5.feature_auth.domain.model.Goal
 import com.bharat.app5.feature_auth.domain.model.UserDetails
 import com.bharat.app5.feature_auth.domain.usecase.RegisterUserUseCase
 import com.google.firebase.auth.AuthCredential
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -49,6 +51,8 @@ data class RegisterUiState @RequiresApi(Build.VERSION_CODES.O) constructor(
 @HiltViewModel
 class StartViewModel @Inject constructor(
     private val registerUserUseCaseProvider : Provider<RegisterUserUseCase>,
+    private val auth : FirebaseAuth,
+    private val authOperationState: AuthOperationState
 ) : ViewModel() {
     private val registerUserUseCase by lazy { registerUserUseCaseProvider.get() }
 
@@ -138,6 +142,8 @@ class StartViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     private fun submitRegistration(credential: AuthCredential){
         viewModelScope.launch{
+            authOperationState.setIsOperationInProgress(true)
+
             registerUserUseCase(credential, uiState.value.userDetails)
                 .onStart {
                     _uiState.update { it.copy(isRegistering = true, registrationError = null, registrationSuccess = false) }
@@ -146,9 +152,11 @@ class StartViewModel @Inject constructor(
                 result.fold(
                     onSuccess = {
                         _uiState.update { it.copy(isRegistering = false, registrationError = null, registrationSuccess = true) }
+                        authOperationState.setIsOperationInProgress(false)
                     },
                     onFailure = { e ->
                         _uiState.update { it.copy(isRegistering = false, registrationError = e.localizedMessage ?: "Something Went Wrong", registrationSuccess = false) }
+                        authOperationState.setIsOperationInProgress(false)
                     }
                 )
             }
