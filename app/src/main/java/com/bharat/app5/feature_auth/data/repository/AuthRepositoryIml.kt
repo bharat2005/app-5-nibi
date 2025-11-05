@@ -48,6 +48,7 @@ class AuthRepositoryIml @Inject constructor(
       } else {
         emit(Result.success(uid))
       }
+
    }.catch {
       emit(Result.failure(Exception(it)))
    }

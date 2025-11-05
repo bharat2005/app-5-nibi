@@ -14,7 +14,7 @@ class RegisterUserUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         credential: AuthCredential,
-        userDetails : UserDetails
+        userDetails : UserDetails,
     ): Flow<Result<Unit>> {
         return repository.registerWithGoogle(credential).flatMapConcat { result ->
             result.fold(
